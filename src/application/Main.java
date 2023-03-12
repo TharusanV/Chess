@@ -21,8 +21,9 @@ public class Main extends Application {
                 Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
                 //Adding root node to the scene
                 Scene scene = new Scene(root);
-                //Gets the style sheet for the scene
-
+                //Gets the style sheet for the scene(s)
+                String css = getClass().getResource("application.css").toExternalForm();
+                scene.getStylesheets().add(css);
 
                 //Stage styling
                 boardStage.setTitle("Chess");
