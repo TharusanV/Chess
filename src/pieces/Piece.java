@@ -1,6 +1,9 @@
 package pieces;
 
+import javafx.scene.Node;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 public abstract class Piece {
@@ -60,6 +63,19 @@ public abstract class Piece {
         this.image = image;
     }
 
-    public abstract boolean canMove(int x, int y);
+    public abstract boolean canMove(int x, int y, GridPane board);
+
+    public Piece getPieceAt(int x, int y, GridPane board) {
+        for (Node node : board.getChildren()) {
+            if (board.getColumnIndex(node) == x && board.getRowIndex(node) == y) {
+                if (node instanceof ImageView) {
+                    Piece piece = (Piece) node.getUserData();
+                    return piece;
+                }
+            }
+        }
+        return null;
+    }
+
 
 }

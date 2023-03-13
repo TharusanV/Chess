@@ -2,6 +2,7 @@ package application;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -12,8 +13,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.Parent;
 import pieces.*;
+import javafx.event.EventHandler;
+
 
 
 /*Order:
@@ -23,6 +27,8 @@ import pieces.*;
  * Nodes (Different components added to a scene e.g. button, images, text boxes)
  */
 public class Main extends Application {
+
+    public Piece selectedPiece = null;
 
     public void start(Stage boardStage) {
         try {
@@ -35,6 +41,7 @@ public class Main extends Application {
             int numBishops = 0;
             int numKnights = 0;
             int numRooks= 0;
+
 
             // Create the brown and white checked pattern
             boolean isWhite = true;
@@ -108,13 +115,13 @@ public class Main extends Application {
                             grid.getChildren().add(imageView);
                         }
                     }
-
                 }
                 isWhite = !isWhite;
             }
 
             // Set the alignment of the grid to center
             grid.setAlignment(Pos.CENTER);
+
 
             //Board stuff
             boardStage.setTitle("Chess");

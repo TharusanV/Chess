@@ -1,6 +1,7 @@
 package pieces;
 
 import javafx.scene.image.Image;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 public class King extends Piece{
@@ -19,10 +20,11 @@ public class King extends Piece{
         this.isFirstMove = !isFirstMove;
     }
 
-    public boolean canMove(int possibleMoveX, int possibleMoveY) {
+    public boolean canMove(int possibleMoveX, int possibleMoveY, GridPane board) {
         int currentX = getPositionX();
         int currentY = getPositionY();
 
         return true;
     }
+
 }

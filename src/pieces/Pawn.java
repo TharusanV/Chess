@@ -1,6 +1,7 @@
 package pieces;
 
 import javafx.scene.image.Image;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 public class Pawn extends Piece{
 
@@ -19,11 +20,50 @@ public class Pawn extends Piece{
         this.isFirstMove = !isFirstMove;
     }
 
-    public boolean canMove(int possibleMoveX, int possibleMoveY) {
-        int currentX = getPositionX();
-        int currentY = getPositionY();
+    public boolean canMove(int possibleMoveX, int possibleMoveY, GridPane board) {
+        // Check if the pawn is moving diagonally
+        if (possibleMoveX != getPositionX() && possibleMoveY != getPositionY()) {
+            // Pawns can only move diagonally when capturing an opponent's piece
+            Piece targetPiece = getPieceAt(possibleMoveX, possibleMoveY, board);
+            int diangonalDirection = getColor() == Color.WHITE ? -1 : 1;
 
-        return true;
+            if (targetPiece == null || targetPiece.getColor() == getColor() ||
+                    possibleMoveX != getPositionX() + diangonalDirection ||
+                    possibleMoveY != getPositionX() + diangonalDirection) {
+                return false;
+            }
+            // If the target piece is an opponent's piece, the move is valid
+            return true;
+        }
+
+        // Check if the pawn is moving forward
+        int moveDirection = getColor() == Color.WHITE ? -1 : 1;
+        if (possibleMoveY != getPositionY() + moveDirection) {
+            return false;
+        }
+
+        // Check if the pawn is moving one or two spaces forward
+        if (possibleMoveX == getPositionX() && possibleMoveY == getPositionY() + moveDirection) {
+            // Moving one space forward
+            return getPieceAt(possibleMoveX, possibleMoveY, board) == null;
+        }
+        else if (possibleMoveX == getPositionX() && possibleMoveY == getPositionY() + moveDirection * 2) {
+            // Moving two spaces forward
+            if (getIsFirstMove() == false) {
+                return false;
+            }
+            // Check if there is a piece blocking the way
+            if (getPieceAt(possibleMoveX, getPositionY() + moveDirection, board) != null) {
+                return false;
+            }
+
+            setIsFirstMove();
+            return getPieceAt(possibleMoveX, possibleMoveY, board) == null;
+        }
+
+        // The move is not valid
+        return false;
     }
+
 
 }
