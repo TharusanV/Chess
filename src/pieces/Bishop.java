@@ -5,25 +5,42 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 public class Bishop extends Piece{
-    private boolean isFirstMove;
 
     public Bishop(int pieceID, int positionX, int positionY, Color color, Image image) {
         super(pieceID, positionX, positionY, color, image);
-        this.isFirstMove = true;
-    }
-
-    public boolean getIsFirstMove() {
-        return isFirstMove;
-    }
-
-    public void setIsFirstMove() {
-        this.isFirstMove = !isFirstMove;
     }
 
     public boolean canMove(int possibleMoveX, int possibleMoveY, GridPane board) {
-        int currentX = getPositionX();
-        int currentY = getPositionY();
+        Piece targetPiece = getPieceAt(possibleMoveX, possibleMoveY, board);
 
-        return true;
+        // Check if the bishop is moving diagonally
+        int diffX = Math.abs(getPositionX() - possibleMoveX);
+        int diffY = Math.abs(getPositionY() - possibleMoveY);
+        if (diffX != diffY) {
+            return false;
+        }
+
+        // Check if there are any pieces between the bishop and the destination
+        int minX = Math.min(getPositionX(), possibleMoveX);
+        int maxX = Math.max(getPositionX(), possibleMoveX);
+        int minY = Math.min(getPositionY(), possibleMoveY);
+        int maxY = Math.max(getPositionY(), possibleMoveY);
+
+        //Checking the spaces between the min and max which is why we +1 min and < for max
+        int x = minX + 1;
+        int y = minY + 1;
+
+        while (x < maxX && y < maxY) {
+            Piece piece = getPieceAt(x, y, board);
+
+            if (piece != null) {
+                return false;
+            }
+
+            x++;
+            y++;
+        }
+
+        return targetPiece == null || targetPiece.getColor() != getColor();
     }
 }

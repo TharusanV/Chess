@@ -5,19 +5,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 public class Rook extends Piece{
-    private boolean isFirstMove;
 
     public Rook(int pieceID, int positionX, int positionY, Color color, Image image) {
         super(pieceID, positionX, positionY, color, image);
-        this.isFirstMove = true;
-    }
-
-    public boolean getIsFirstMove() {
-        return isFirstMove;
-    }
-
-    public void setIsFirstMove() {
-        this.isFirstMove = !isFirstMove;
     }
 
     public boolean canMove(int possibleMoveX, int possibleMoveY, GridPane board) {
