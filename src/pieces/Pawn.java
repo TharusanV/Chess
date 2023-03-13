@@ -29,7 +29,7 @@ public class Pawn extends Piece{
 
             if (targetPiece == null || targetPiece.getColor() == getColor() ||
                     possibleMoveX != getPositionX() + diangonalDirection ||
-                    possibleMoveY != getPositionX() + diangonalDirection) {
+                    possibleMoveY != getPositionY() + diangonalDirection) {
                 return false;
             }
             // If the target piece is an opponent's piece, the move is valid

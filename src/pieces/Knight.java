@@ -21,9 +21,18 @@ public class Knight extends Piece{
     }
 
     public boolean canMove(int possibleMoveX, int possibleMoveY, GridPane board) {
-        int currentX = getPositionX();
-        int currentY = getPositionY();
+        Piece targetPiece = getPieceAt(possibleMoveX, possibleMoveY, board);
 
-        return true;
+        int[][] possibilities = { {1, 2}, {-1, 2}, {1, -2}, {-1,-2} };
+        int diffX = getPositionX() - possibleMoveX;
+        int diffY = getPositionY() - possibleMoveY;
+
+        for (int[] pair : possibilities) {
+            if (pair[0] == diffX && pair[1] == diffY) {
+                return targetPiece == null || targetPiece.getColor() != getColor();
+            }
+        }
+
+        return false;
     }
 }

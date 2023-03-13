@@ -21,10 +21,17 @@ public class King extends Piece{
     }
 
     public boolean canMove(int possibleMoveX, int possibleMoveY, GridPane board) {
-        int currentX = getPositionX();
-        int currentY = getPositionY();
+        Piece targetPiece = getPieceAt(possibleMoveX, possibleMoveY, board);
 
-        return true;
+        int diffX = Math.abs(getPositionX() - possibleMoveX);
+        int diffY = Math.abs(getPositionY() - possibleMoveY);
+
+        if (diffX <= 1 && diffY <= 1) {
+            return targetPiece == null || targetPiece.getColor() != getColor();
+        }
+
+        return false;
     }
+
 
 }
