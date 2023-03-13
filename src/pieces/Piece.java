@@ -4,13 +4,15 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public abstract class Piece {
+    private  int pieceID;
     private int positionX;
     private int positionY;
     private Color color;
     private boolean isKilled;
     private Image image;
 
-    public Piece(int positionX, int positionY, Color color, Image image) {
+    public Piece(int pieceID, int positionX, int positionY, Color color, Image image) {
+        this.pieceID = pieceID;
         this.positionX = positionX;
         this.positionY = positionY;
         this.color = color;
