@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -12,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
+import pieces.*;
 
 
 /*Order:
@@ -22,24 +24,17 @@ import javafx.scene.Parent;
  */
 public class Main extends Application {
 
-    //Piece Images
-    String w_pawnImageString = "assets/white_pawn.png";
-    String b_pawnImageString = "assets/black_pawn.png";
-    String w_kingImageString = "assets/white_king.png";
-    String b_kingImageString = "assets/black_king.png";
-    String w_rookImageString = "assets/white_rook.png";
-    String b_rookImageString = "assets/black_rook.png";
-    String w_knightImageString = "assets/white_knight.png";
-    String b_knightImageString = "assets/black_knight.png";
-    String w_bishopImageString = "assets/white_bishop.png";
-    String b_bishopImageString = "assets/black_bishop.png";
-    String w_queenImageString = "assets/white_queen.png";
-    String b_queenImageString = "assets/black_queen.png";
-
     public void start(Stage boardStage) {
         try {
             GridPane grid = new GridPane();
             grid.setPrefSize(800, 800);
+
+            int numPawns = 0;
+            int numKings = 0;
+            int numQueens = 0;
+            int numBishops = 0;
+            int numKnights = 0;
+            int numRooks= 0;
 
             // Create the brown and white checked pattern
             boolean isWhite = true;
@@ -53,6 +48,67 @@ public class Main extends Application {
                     }
                     grid.add(square, col, row);
                     isWhite = !isWhite;
+
+                    // Place pawns on the board
+                    if (row == 1 || row == 6) {
+                        Pawn pawn = new Pawn(numPawns, col, row, (row == 1) ? Color.BLACK : Color.WHITE, (row == 1) ? new Image("assets/black_pawn.png") : new Image("assets/white_pawn.png"));
+                        numPawns++;
+                        ImageView imageView = new ImageView(pawn.getImage());
+                        imageView.setFitWidth(square.getWidth());
+                        imageView.setFitHeight(square.getHeight());
+                        GridPane.setConstraints(imageView, col, row);
+                        grid.getChildren().add(imageView);
+                    }
+
+                    // Placing the rest of the pieces
+                    if (row == 0 || row == 7){
+                        if(col == 0 || col == 7){
+                            Rook rook = new Rook(numRooks, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_rook.png") : new Image("assets/white_rook.png"));
+                            numRooks++;
+                            ImageView imageView = new ImageView(rook.getImage());
+                            imageView.setFitWidth(square.getWidth());
+                            imageView.setFitHeight(square.getHeight());
+                            GridPane.setConstraints(imageView, col, row);
+                            grid.getChildren().add(imageView);
+                        }
+                        if(col == 1 || col == 6){
+                            Knight knight = new Knight(numKnights, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_knight.png") : new Image("assets/white_knight.png"));
+                            numKnights++;
+                            ImageView imageView = new ImageView(knight.getImage());
+                            imageView.setFitWidth(square.getWidth());
+                            imageView.setFitHeight(square.getHeight());
+                            GridPane.setConstraints(imageView, col, row);
+                            grid.getChildren().add(imageView);
+                        }
+                        if(col == 2 || col == 5){
+                            Bishop bishop = new Bishop(numBishops, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_bishop.png") : new Image("assets/white_bishop.png"));
+                            numBishops++;
+                            ImageView imageView = new ImageView(bishop.getImage());
+                            imageView.setFitWidth(square.getWidth());
+                            imageView.setFitHeight(square.getHeight());
+                            GridPane.setConstraints(imageView, col, row);
+                            grid.getChildren().add(imageView);
+                        }
+                        if(col == 3){
+                            Queen queen = new Queen(numQueens, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_queen.png") : new Image("assets/white_queen.png"));
+                            numQueens++;
+                            ImageView imageView = new ImageView(queen.getImage());
+                            imageView.setFitWidth(square.getWidth());
+                            imageView.setFitHeight(square.getHeight());
+                            GridPane.setConstraints(imageView, col, row);
+                            grid.getChildren().add(imageView);
+                        }
+                        if(col == 4){
+                            King king = new King(numKings, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_King.png") : new Image("assets/white_King.png"));
+                            numKings++;
+                            ImageView imageView = new ImageView(king.getImage());
+                            imageView.setFitWidth(square.getWidth());
+                            imageView.setFitHeight(square.getHeight());
+                            GridPane.setConstraints(imageView, col, row);
+                            grid.getChildren().add(imageView);
+                        }
+                    }
+
                 }
                 isWhite = !isWhite;
             }
