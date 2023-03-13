@@ -32,7 +32,7 @@ public class Rook extends Piece{
             int maxY = Math.max(getPositionY(), possibleMoveY);
             Piece targetPiece = getPieceAt(possibleMoveX, possibleMoveY, board);
             for (int y = minY + 1; y < maxY; y++) {
-                if (targetPiece != null && targetPiece.getColor() == getColor()) {
+                if (getPieceAt(possibleMoveX, y, board) != null) {
                     return false;
                 }
             }
@@ -46,7 +46,7 @@ public class Rook extends Piece{
             int maxX = Math.max(getPositionX(), possibleMoveX);
             Piece targetPiece = getPieceAt(possibleMoveX, possibleMoveY, board);
             for (int x = minX + 1; x < maxX; x++) {
-                if (targetPiece != null && targetPiece.getColor() == getColor()) {
+                if (getPieceAt(x, possibleMoveY, board) != null) {
                     return false;
                 }
             }
