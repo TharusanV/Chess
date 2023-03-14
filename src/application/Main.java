@@ -17,7 +17,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.Parent;
 import pieces.*;
 import javafx.event.EventHandler;
+import utility.Board;
 
+import java.util.ArrayList;
+import java.util.Optional;
 
 
 /*Order:
@@ -28,7 +31,12 @@ import javafx.event.EventHandler;
  */
 public class Main extends Application {
 
-    public Piece selectedPiece = null;
+    Piece selectedPiece;
+    Piece possiblePiece;
+    int numSelectedPieces = 0;
+
+    ArrayList<Piece> allPieces = new ArrayList<Piece>();
+
 
     public void start(Stage boardStage) {
         try {
@@ -41,7 +49,6 @@ public class Main extends Application {
             int numBishops = 0;
             int numKnights = 0;
             int numRooks= 0;
-
 
             // Create the brown and white checked pattern
             boolean isWhite = true;
@@ -60,11 +67,8 @@ public class Main extends Application {
                     if (row == 1 || row == 6) {
                         Pawn pawn = new Pawn(numPawns, col, row, (row == 1) ? Color.BLACK : Color.WHITE, (row == 1) ? new Image("assets/black_pawn.png") : new Image("assets/white_pawn.png"));
                         numPawns++;
-                        ImageView imageView = new ImageView(pawn.getImage());
-                        imageView.setFitWidth(square.getWidth());
-                        imageView.setFitHeight(square.getHeight());
-                        GridPane.setConstraints(imageView, col, row);
-                        grid.getChildren().add(imageView);
+                        pawn.addImageViewToGridPane(grid, col, row);
+                        allPieces.add(pawn);
                     }
 
                     // Placing the rest of the pieces
@@ -72,55 +76,89 @@ public class Main extends Application {
                         if(col == 0 || col == 7){
                             Rook rook = new Rook(numRooks, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_rook.png") : new Image("assets/white_rook.png"));
                             numRooks++;
-                            ImageView imageView = new ImageView(rook.getImage());
-                            imageView.setFitWidth(square.getWidth());
-                            imageView.setFitHeight(square.getHeight());
-                            GridPane.setConstraints(imageView, col, row);
-                            grid.getChildren().add(imageView);
+                            rook.addImageViewToGridPane(grid, col, row);
+                            allPieces.add(rook);
                         }
                         if(col == 1 || col == 6){
                             Knight knight = new Knight(numKnights, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_knight.png") : new Image("assets/white_knight.png"));
                             numKnights++;
-                            ImageView imageView = new ImageView(knight.getImage());
-                            imageView.setFitWidth(square.getWidth());
-                            imageView.setFitHeight(square.getHeight());
-                            GridPane.setConstraints(imageView, col, row);
-                            grid.getChildren().add(imageView);
+                            knight.addImageViewToGridPane(grid, col, row);
+                            allPieces.add(knight);
                         }
                         if(col == 2 || col == 5){
                             Bishop bishop = new Bishop(numBishops, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_bishop.png") : new Image("assets/white_bishop.png"));
                             numBishops++;
-                            ImageView imageView = new ImageView(bishop.getImage());
-                            imageView.setFitWidth(square.getWidth());
-                            imageView.setFitHeight(square.getHeight());
-                            GridPane.setConstraints(imageView, col, row);
-                            grid.getChildren().add(imageView);
+                            bishop.addImageViewToGridPane(grid, col, row);
+                            allPieces.add(bishop);
                         }
                         if(col == 3){
                             Queen queen = new Queen(numQueens, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_queen.png") : new Image("assets/white_queen.png"));
                             numQueens++;
-                            ImageView imageView = new ImageView(queen.getImage());
-                            imageView.setFitWidth(square.getWidth());
-                            imageView.setFitHeight(square.getHeight());
-                            GridPane.setConstraints(imageView, col, row);
-                            grid.getChildren().add(imageView);
+                            queen.addImageViewToGridPane(grid, col, row);
+                            allPieces.add(queen);
                         }
                         if(col == 4){
                             King king = new King(numKings, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_King.png") : new Image("assets/white_King.png"));
                             numKings++;
-                            ImageView imageView = new ImageView(king.getImage());
-                            imageView.setFitWidth(square.getWidth());
-                            imageView.setFitHeight(square.getHeight());
-                            GridPane.setConstraints(imageView, col, row);
-                            grid.getChildren().add(imageView);
+                            king.addImageViewToGridPane(grid, col, row);
+                            allPieces.add(king);
                         }
                     }
+
                 }
                 isWhite = !isWhite;
             }
 
             // Set the alignment of the grid to center
             grid.setAlignment(Pos.CENTER);
+
+
+
+            // Add mouse event listeners to each square
+            grid.setOnMouseClicked(event -> {
+                Board board = new Board(grid);
+                Node clickedNode = event.getPickResult().getIntersectedNode();
+                if(numSelectedPieces == 0){
+                    if (clickedNode instanceof ImageView) {
+                        Integer rowIndex = GridPane.getRowIndex(clickedNode);
+                        Integer colIndex = GridPane.getColumnIndex(clickedNode);
+                        System.out.println("Step 1 - Clicked on row " + rowIndex + ", column " + colIndex);
+                        selectedPiece = board.getPieceAt(colIndex, rowIndex, grid);
+                        numSelectedPieces++;
+                    }
+                }
+                else{
+                    if (clickedNode instanceof ImageView ) {
+                        Integer rowIndex = GridPane.getRowIndex(clickedNode);
+                        Integer colIndex = GridPane.getColumnIndex(clickedNode);
+                        System.out.println("Step 2 - Clicked on row " + rowIndex + ", column " + colIndex);
+                        possiblePiece = board.getPieceAt(colIndex, rowIndex, grid);
+                        if(selectedPiece.canMove(possiblePiece.getPositionX(), possiblePiece.getPositionY(), grid)){
+                            //selectedPiece.setImageViewPosition(colIndex, rowIndex, grid);
+                            board.updateChessPiece(selectedPiece.getPositionX(), selectedPiece.getPositionY(), colIndex, rowIndex, allPieces, grid);
+                            board.updateGridPane(grid, allPieces);
+                            numSelectedPieces = 0;
+                        };
+                        numSelectedPieces = 0;
+                    }
+                    else if (clickedNode instanceof Rectangle) {
+                        Integer rowIndex = GridPane.getRowIndex(clickedNode);
+                        Integer colIndex = GridPane.getColumnIndex(clickedNode);
+                        System.out.println("Step 2 - Clicked on row " + rowIndex + ", column " + colIndex);
+                        if(selectedPiece.canMove(colIndex, rowIndex, grid)){
+                            board.updateChessPiece(selectedPiece.getPositionX(), selectedPiece.getPositionY(), colIndex, rowIndex, allPieces, grid);
+                            board.updateGridPane(grid, allPieces);
+                            numSelectedPieces = 0;
+                        };
+                        numSelectedPieces = 0;
+                    }
+
+                    else{
+                        numSelectedPieces = 0;
+                    }
+                }
+
+            });
 
 
             //Board stuff

@@ -14,6 +14,8 @@ public abstract class Piece {
     private boolean isKilled;
     private Image image;
 
+    private ImageView imageView;
+
     public Piece(int pieceID, int positionX, int positionY, Color color, Image image) {
         this.pieceID = pieceID;
         this.positionX = positionX;
@@ -21,6 +23,7 @@ public abstract class Piece {
         this.color = color;
         this.isKilled = false;
         this.image = image;
+        this.imageView = new ImageView(image);
     }
 
     public int getPositionX() {
@@ -63,7 +66,30 @@ public abstract class Piece {
         this.image = image;
     }
 
+    public ImageView getImageView(){
+        return this.imageView;
+    }
+
+    public void setImageViewPosition(double x, double y, GridPane grid) {
+
+        this.setPositionX((int) x);
+        this.setPositionY((int) y);
+        GridPane.setRowIndex(this.imageView, (int) y);
+        GridPane.setColumnIndex(this.imageView, (int) x);
+    }
+
     public abstract boolean canMove(int x, int y, GridPane board);
+
+    public ImageView addImageViewToGridPane(GridPane gridPane, int column, int row) {
+
+        this.getImageView().setFitWidth(100);
+        this.getImageView().setFitHeight(100);
+        GridPane.setConstraints(this.getImageView(), column, row);
+        gridPane.getChildren().add(this.getImageView());
+        this.getImageView().setUserData(this);
+        return this.getImageView();
+    }
+
 
     public Piece getPieceAt(int x, int y, GridPane board) {
         for (Node node : board.getChildren()) {
@@ -76,6 +102,5 @@ public abstract class Piece {
         }
         return null;
     }
-
 
 }

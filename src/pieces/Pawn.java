@@ -27,12 +27,12 @@ public class Pawn extends Piece{
             Piece targetPiece = getPieceAt(possibleMoveX, possibleMoveY, board);
             int diangonalDirection = getColor() == Color.WHITE ? -1 : 1;
 
-            if (targetPiece == null || targetPiece.getColor() == getColor() ||
+            if (targetPiece.getColor() == getColor() ||
                     possibleMoveX != getPositionX() + diangonalDirection ||
                     possibleMoveY != getPositionY() + diangonalDirection) {
                 return false;
             }
-            // If the target piece is an opponent's piece, the move is valid
+
             return true;
         }
 
@@ -53,12 +53,10 @@ public class Pawn extends Piece{
                 return false;
             }
             // Check if there is a piece blocking the way
-            if (getPieceAt(possibleMoveX, getPositionY() + moveDirection, board) != null) {
-                return false;
-            }
+
 
             setIsFirstMove();
-            return getPieceAt(possibleMoveX, possibleMoveY, board) == null;
+            return true;
         }
 
         // The move is not valid
