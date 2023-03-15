@@ -25,38 +25,41 @@ public class Pawn extends Piece{
         if (possibleMoveX != getPositionX() && possibleMoveY != getPositionY()) {
             // Pawns can only move diagonally when capturing an opponent's piece
             Piece targetPiece = getPieceAt(possibleMoveX, possibleMoveY, board);
-            int diangonalDirection = getColor() == Color.WHITE ? -1 : 1;
+            if(targetPiece != null){
+                int diangonalDirection = getColor() == Color.WHITE ? -1 : 1;
 
-            if (targetPiece.getColor() == getColor() ||
-                    possibleMoveX != getPositionX() + diangonalDirection ||
-                    possibleMoveY != getPositionY() + diangonalDirection) {
-                return false;
+                if (targetPiece.getColor() == getColor() ||
+                        possibleMoveX != getPositionX() + diangonalDirection ||
+                        possibleMoveY != getPositionY() + diangonalDirection) {
+                    return false;
+                }
+
+                return true;
             }
-
-            return true;
+            return false;
         }
 
         // Check if the pawn is moving forward
         int moveDirection = getColor() == Color.WHITE ? -1 : 1;
-        if (possibleMoveY != getPositionY() + moveDirection) {
-            return false;
+
+        if (possibleMoveX == getPositionX() && possibleMoveY == getPositionY() + moveDirection * 2) {
+            // Moving two spaces forward
+            if (getIsFirstMove() == false) {
+                return false;
+            }
+            // Check if there is a piece in the way
+            if (getPieceAt(possibleMoveX, getPositionY() + moveDirection, board) != null) {
+                return false;
+            }
+            setIsFirstMove();
+            return getPieceAt(possibleMoveX, possibleMoveY, board) == null;
         }
+
 
         // Check if the pawn is moving one or two spaces forward
         if (possibleMoveX == getPositionX() && possibleMoveY == getPositionY() + moveDirection) {
             // Moving one space forward
             return getPieceAt(possibleMoveX, possibleMoveY, board) == null;
-        }
-        else if (possibleMoveX == getPositionX() && possibleMoveY == getPositionY() + moveDirection * 2) {
-            // Moving two spaces forward
-            if (getIsFirstMove() == false) {
-                return false;
-            }
-            // Check if there is a piece blocking the way
-
-
-            setIsFirstMove();
-            return true;
         }
 
         // The move is not valid

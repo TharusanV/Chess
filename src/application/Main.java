@@ -35,6 +35,9 @@ public class Main extends Application {
     Piece possiblePiece;
     int numSelectedPieces = 0;
 
+    boolean isWhiteTurn = true;
+    boolean isBlackTurn = false;
+
     ArrayList<Piece> allPieces = new ArrayList<Piece>();
 
 
@@ -124,7 +127,11 @@ public class Main extends Application {
                         Integer colIndex = GridPane.getColumnIndex(clickedNode);
                         System.out.println("Step 1 - Clicked on row " + rowIndex + ", column " + colIndex);
                         selectedPiece = board.getPieceAt(colIndex, rowIndex, grid);
-                        numSelectedPieces++;
+                        if (selectedPiece.getColor() == Color.WHITE && isWhiteTurn) {
+                            numSelectedPieces++;
+                        } else if (selectedPiece.getColor() == Color.BLACK && !isWhiteTurn) {
+                            numSelectedPieces++;
+                        }
                     }
                 }
                 else{
@@ -138,6 +145,13 @@ public class Main extends Application {
                             board.updateChessPiece(selectedPiece.getPositionX(), selectedPiece.getPositionY(), colIndex, rowIndex, allPieces, grid);
                             board.updateGridPane(grid, allPieces);
                             numSelectedPieces = 0;
+                            if (isWhiteTurn) {
+                                isWhiteTurn = false;
+                                isBlackTurn = true;
+                            } else {
+                                isWhiteTurn = true;
+                                isBlackTurn = false;
+                            }
                         };
                         numSelectedPieces = 0;
                     }
@@ -149,6 +163,13 @@ public class Main extends Application {
                             board.updateChessPiece(selectedPiece.getPositionX(), selectedPiece.getPositionY(), colIndex, rowIndex, allPieces, grid);
                             board.updateGridPane(grid, allPieces);
                             numSelectedPieces = 0;
+                            if (isWhiteTurn) {
+                                isWhiteTurn = false;
+                                isBlackTurn = true;
+                            } else {
+                                isWhiteTurn = true;
+                                isBlackTurn = false;
+                            }
                         };
                         numSelectedPieces = 0;
                     }
