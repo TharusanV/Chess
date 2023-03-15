@@ -3,6 +3,9 @@ package pieces;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+
+import java.util.ArrayList;
 
 public class Rook extends Piece{
 
@@ -10,6 +13,85 @@ public class Rook extends Piece{
         super(pieceID, positionX, positionY, color, image);
     }
     public void possibleMoves(GridPane board){
+        ArrayList<int[]> coordinates = new ArrayList<int[]>();
+
+        // Check moves in the same row to the right
+        for(int col = getPositionX() + 1; col < 8; col++){
+            if (getPieceAt(col, getPositionY(), board) == null){
+                coordinates.add(new int[] {col, getPositionY()});
+            }
+            else if (getPieceAt(col, getPositionY(), board) != null && getPieceAt(col, getPositionY(), board).getColor() != getColor()){
+                coordinates.add(new int[] {col, getPositionY()});
+                break;
+            }
+            else{
+                break;
+            }
+        }
+
+        // Check moves in the same row to the left
+        for (int col = getPositionX() - 1; col >= 0; col--) {
+            if (getPieceAt(col, getPositionY(), board) == null){
+                coordinates.add(new int[] {col, getPositionY()});
+            }
+            else if (getPieceAt(col, getPositionY(), board) != null && getPieceAt(col, getPositionY(), board).getColor() != getColor()){
+                coordinates.add(new int[] {col, getPositionY()});
+                break;
+            }
+            else{
+                break;
+            }
+        }
+
+        // Check moves in the same column upwards
+        for (int row = getPositionY() - 1; row >= 0; row--) {
+            if (getPieceAt(getPositionX(), row, board) == null){
+                coordinates.add(new int[] {getPositionX(), row});
+            }
+            else if (getPieceAt(getPositionX(), row, board) != null && getPieceAt(getPositionX(), row, board).getColor() != getColor()){
+                coordinates.add(new int[] {getPositionX(), row});
+                break;
+            }
+            else{
+                break;
+            }
+        }
+
+        for (int row = getPositionY() + 1; row < 8; row++) {
+            if (getPieceAt(getPositionX(), row, board) == null){
+                coordinates.add(new int[] {getPositionX(), row});
+            }
+            else if (getPieceAt(getPositionX(), row, board) != null && getPieceAt(getPositionX(), row, board).getColor() != getColor()){
+                coordinates.add(new int[] {getPositionX(), row});
+                break;
+            }
+            else{
+                break;
+            }
+        }
+
+        for (int[] coord : coordinates) {
+            // Get the row and column indexes of the rectangle
+            int row = coord[1];
+            int col = coord[0];
+
+            if(getPieceAt(col, row, board) == null){
+                // Get the rectangle at the row and column index
+                Rectangle rect = (Rectangle) board.getChildren().get(row * board.getRowCount() + col);
+
+                // Modify the color of the rectangle
+                rect.setFill(Color.CRIMSON);
+            }
+            if(getPieceAt(col, row, board) != null) {
+                if (getPieceAt(col, row, board).getColor() != getColor()) {
+                    Rectangle rect = (Rectangle) board.getChildren().get(row * board.getRowCount() + col);
+                    // Modify the color of the rectangle
+                    rect.setFill(Color.CRIMSON);
+                }
+            }
+
+        }
+
 
     }
 

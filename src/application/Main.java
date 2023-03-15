@@ -121,6 +121,7 @@ public class Main extends Application {
             grid.setOnMouseClicked(event -> {
                 Board board = new Board(grid);
                 Node clickedNode = event.getPickResult().getIntersectedNode();
+                board.updateGridPane(grid, allPieces);
                 if(numSelectedPieces == 0){
                     if (clickedNode instanceof ImageView) {
                         Integer rowIndex = GridPane.getRowIndex(clickedNode);
@@ -174,7 +175,6 @@ public class Main extends Application {
                         };
                         numSelectedPieces = 0;
                     }
-
                     else{
                         numSelectedPieces = 0;
                     }

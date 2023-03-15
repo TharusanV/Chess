@@ -28,6 +28,7 @@ public class Pawn extends Piece{
         ArrayList<int[]> coordinates = new ArrayList<int[]>();
         int moveDirection = getColor() == Color.WHITE ? -1 : 1;
 
+
         if(getPieceAt(getPositionX(), getPositionY() + moveDirection, board) == null){
             coordinates.add(new int[] {getPositionX(), getPositionY() + moveDirection});
             if(getIsFirstMove() == true && getPieceAt(getPositionX(), getPositionY() + moveDirection * 2, board) == null){
@@ -35,20 +36,19 @@ public class Pawn extends Piece{
             }
         }
 
-        if(getPieceAt(getPositionX()+moveDirection, getPositionY() + moveDirection, board) != null){
-            if (getPieceAt(getPositionX()+moveDirection, getPositionY() + moveDirection, board).getColor() != getColor()){
+        //Possible diagonal (left White / right Brown)
+        if(getPieceAt(getPositionX() + moveDirection, getPositionY() + moveDirection, board) != null){
+            if (getPieceAt(getPositionX() + moveDirection, getPositionY() + moveDirection, board).getColor() != getColor()){
                 coordinates.add(new int[] {getPositionX() + moveDirection, getPositionY() + moveDirection});
             }
         }
 
-        if(getPieceAt(getPositionX() - moveDirection, getPositionY() - moveDirection, board) != null){
-            if (getPieceAt(getPositionX() - moveDirection, getPositionY() - moveDirection, board).getColor() != getColor()){
-                coordinates.add(new int[] {getPositionX() - moveDirection, getPositionY() - moveDirection});
+        //Possible diagonal (right White / left Brown)
+        if(getPieceAt(getPositionX() - moveDirection, getPositionY() + moveDirection, board) != null){
+            if (getPieceAt(getPositionX() - moveDirection, getPositionY() + moveDirection, board).getColor() != getColor()){
+                coordinates.add(new int[] {getPositionX() - moveDirection, getPositionY() + moveDirection});
             }
         }
-
-
-
 
         // Loop through the coordinates in the ArrayList
         for (int[] coord : coordinates) {
