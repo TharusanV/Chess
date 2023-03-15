@@ -10,6 +10,10 @@ public class Queen extends Piece{
         super(pieceID, positionX, positionY, color, image);
     }
 
+    public void possibleMoves(GridPane board){
+
+    }
+
     public boolean canMove(int possibleMoveX, int possibleMoveY, GridPane board) {
         Piece targetPiece = getPieceAt(possibleMoveX, possibleMoveY, board);
 

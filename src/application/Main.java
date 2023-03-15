@@ -128,8 +128,10 @@ public class Main extends Application {
                         System.out.println("Step 1 - Clicked on row " + rowIndex + ", column " + colIndex);
                         selectedPiece = board.getPieceAt(colIndex, rowIndex, grid);
                         if (selectedPiece.getColor() == Color.WHITE && isWhiteTurn) {
+                            selectedPiece.possibleMoves(grid);
                             numSelectedPieces++;
                         } else if (selectedPiece.getColor() == Color.BLACK && !isWhiteTurn) {
+                            selectedPiece.possibleMoves(grid);
                             numSelectedPieces++;
                         }
                     }
@@ -141,7 +143,6 @@ public class Main extends Application {
                         System.out.println("Step 2 - Clicked on row " + rowIndex + ", column " + colIndex);
                         possiblePiece = board.getPieceAt(colIndex, rowIndex, grid);
                         if(selectedPiece.canMove(possiblePiece.getPositionX(), possiblePiece.getPositionY(), grid)){
-                            //selectedPiece.setImageViewPosition(colIndex, rowIndex, grid);
                             board.updateChessPiece(selectedPiece.getPositionX(), selectedPiece.getPositionY(), colIndex, rowIndex, allPieces, grid);
                             board.updateGridPane(grid, allPieces);
                             numSelectedPieces = 0;

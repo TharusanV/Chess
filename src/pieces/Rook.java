@@ -9,6 +9,9 @@ public class Rook extends Piece{
     public Rook(int pieceID, int positionX, int positionY, Color color, Image image) {
         super(pieceID, positionX, positionY, color, image);
     }
+    public void possibleMoves(GridPane board){
+
+    }
 
     public boolean canMove(int possibleMoveX, int possibleMoveY, GridPane board) {
         // Check if the rook is moving diagonally (Not Allowed)

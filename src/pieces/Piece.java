@@ -11,7 +11,6 @@ public abstract class Piece {
     private int positionX;
     private int positionY;
     private Color color;
-    private boolean isKilled;
     private Image image;
 
     private ImageView imageView;
@@ -21,7 +20,6 @@ public abstract class Piece {
         this.positionX = positionX;
         this.positionY = positionY;
         this.color = color;
-        this.isKilled = false;
         this.image = image;
         this.imageView = new ImageView(image);
     }
@@ -50,14 +48,6 @@ public abstract class Piece {
         this.color = color;
     }
 
-    public boolean isKilled() {
-        return isKilled;
-    }
-
-    public void setKilled(boolean killed) {
-        isKilled = killed;
-    }
-
     public Image getImage() {
         return image;
     }
@@ -71,7 +61,6 @@ public abstract class Piece {
     }
 
     public void setImageViewPosition(double x, double y, GridPane grid) {
-
         this.setPositionX((int) x);
         this.setPositionY((int) y);
         GridPane.setRowIndex(this.imageView, (int) y);
@@ -79,6 +68,8 @@ public abstract class Piece {
     }
 
     public abstract boolean canMove(int x, int y, GridPane board);
+
+    public abstract void possibleMoves(GridPane board);
 
     public ImageView addImageViewToGridPane(GridPane gridPane, int column, int row) {
 
@@ -102,5 +93,4 @@ public abstract class Piece {
         }
         return null;
     }
-
 }
