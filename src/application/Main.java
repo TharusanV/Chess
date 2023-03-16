@@ -115,8 +115,6 @@ public class Main extends Application {
             // Set the alignment of the grid to center
             grid.setAlignment(Pos.CENTER);
 
-
-
             // Add mouse event listeners to each square
             grid.setOnMouseClicked(event -> {
                 Board board = new Board(grid);
@@ -126,7 +124,7 @@ public class Main extends Application {
                     if (clickedNode instanceof ImageView) {
                         Integer rowIndex = GridPane.getRowIndex(clickedNode);
                         Integer colIndex = GridPane.getColumnIndex(clickedNode);
-                        System.out.println("Step 1 - Clicked on row " + rowIndex + ", column " + colIndex);
+                        //System.out.println("Step 1 - Clicked on row " + rowIndex + ", column " + colIndex);
                         selectedPiece = board.getPieceAt(colIndex, rowIndex, grid);
                         if (selectedPiece.getColor() == Color.WHITE && isWhiteTurn) {
                             selectedPiece.possibleMoves(grid);
@@ -141,7 +139,7 @@ public class Main extends Application {
                     if (clickedNode instanceof ImageView ) {
                         Integer rowIndex = GridPane.getRowIndex(clickedNode);
                         Integer colIndex = GridPane.getColumnIndex(clickedNode);
-                        System.out.println("Step 2 - Clicked on row " + rowIndex + ", column " + colIndex);
+                        //System.out.println("Step 2 - Clicked on row " + rowIndex + ", column " + colIndex);
                         possiblePiece = board.getPieceAt(colIndex, rowIndex, grid);
                         if(selectedPiece.canMove(possiblePiece.getPositionX(), possiblePiece.getPositionY(), grid)){
                             board.updateChessPiece(selectedPiece.getPositionX(), selectedPiece.getPositionY(), colIndex, rowIndex, allPieces, grid);

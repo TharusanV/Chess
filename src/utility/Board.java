@@ -1,11 +1,14 @@
 package utility;
 
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import pieces.Pawn;
 import pieces.Piece;
+import pieces.Queen;
 
 import java.util.ArrayList;
 
@@ -62,6 +65,21 @@ public class Board {
         if (targetPiece != null) {
             // Remove the target piece from the array list
             pieces.remove(targetPiece);
+        }
+
+        if(movingPiece instanceof Pawn){
+            if(movingPiece.getColor() == Color.WHITE && startY == 1 && endY == 0){
+                pieces.remove(movingPiece);
+                Queen queen = new Queen(pieces.size(), endX, endY, Color.WHITE, new Image("assets/white_queen.png"));
+                queen.addImageViewToGridPane(grid, endX, endY);
+                pieces.add(queen);
+            }
+            if(movingPiece.getColor() == Color.BLACK && startY == 6 && endY == 7){
+                pieces.remove(movingPiece);
+                Queen queen = new Queen(pieces.size(), endX, endY, Color.BLACK, new Image("assets/black_queen.png"));
+                queen.addImageViewToGridPane(grid, endX, endY);
+                pieces.add(queen);
+            }
         }
 
         // Move the piece

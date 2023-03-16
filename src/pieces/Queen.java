@@ -151,8 +151,14 @@ public class Queen extends Piece{
         int diffY = Math.abs(getPositionY() - possibleMoveY);
         if (diffX == diffY) {
             // Check if there are any pieces blocking the bishop's path
-            int moveDirectionX = (possibleMoveX - getPositionX()) / diffX;
-            int moveDirectionY = (possibleMoveY - getPositionY()) / diffY;
+            int moveDirectionX = 0;
+            int moveDirectionY = 0;
+            if (diffX != 0) {
+                moveDirectionX = (possibleMoveX - getPositionX()) / diffX;
+            }
+            if (diffY != 0) {
+                moveDirectionY = (possibleMoveY - getPositionY()) / diffY;
+            }
             for (int i = 1; i < diffX; i++) {
                 int checkX = getPositionX() + i * moveDirectionX;
                 int checkY = getPositionY() + i * moveDirectionY;
