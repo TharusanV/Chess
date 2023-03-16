@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import pieces.King;
 import pieces.Pawn;
 import pieces.Piece;
 import pieces.Queen;
@@ -113,6 +114,62 @@ public class Board {
             grid.add(piece.getImageView(), piece.getPositionX(), piece.getPositionY());
         }
     }
+
+    public String isCheckMate(GridPane grid, ArrayList<Piece> chessPieces, boolean isWhiteTurn) {
+        int[][] offsets = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
+        Piece king = null;
+        ArrayList<int[]> kingMoves = new ArrayList<>();
+        ArrayList<Piece> opponentPieces = new ArrayList<>();
+        int numOfAttackOps = 0;
+
+        for (Piece piece : chessPieces) {
+            if(piece.getColor() == (isWhiteTurn ? Color.WHITE : Color.BLACK)){
+                if(piece instanceof King){
+                    king = piece;
+                    kingMoves.addAll(king.getCoordinates());
+                }
+            } else {
+                opponentPieces.add(piece);
+            }
+        }
+
+        System.out.println("King moves: " + kingMoves);
+
+        for (int[] move : kingMoves) {
+            System.out.println(move[0] + ", " + move[1]);
+        }
+
+        for (Piece piece : opponentPieces) {
+            for (int[] coord : offsets) {
+                int row = coord[1];
+                int col = coord[0];
+                for (int[] possible : piece.getCoordinates()){
+                    int y = possible[1];
+                    int x = possible[0];
+                    if((col + x) == king.getPositionX() && (row + y) == king.getPositionY()){
+                        kingMoves.removeIf(move -> (move[0] == x && move[1] == y));
+                        numOfAttackOps++;
+                    }
+                }
+            }
+        }
+
+        System.out.println("King moves: " + kingMoves);
+
+        for (int[] move : kingMoves) {
+            System.out.println(move[0] + ", " + move[1]);
+        }
+
+        if(kingMoves.isEmpty() && numOfAttackOps > 0){
+            return (isWhiteTurn ? "Black Win" : "White Win");
+        } else if(kingMoves.size() < 8 && kingMoves.size() > 0  && numOfAttackOps > 0){
+            return (isWhiteTurn ? "White in check" : "Black in check");
+        }
+
+        return "1"; // the player is not in check
+    }
+
+
 
 
 }

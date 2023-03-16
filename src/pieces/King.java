@@ -5,6 +5,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.util.ArrayList;
+
 public class King extends Piece{
     // Define the possible offsets for a King's move
     int[][] offsets = {
@@ -13,9 +15,17 @@ public class King extends Piece{
             {1, -1},  {1, 0},  {1, 1}
     };
 
+    private ArrayList<int[]> coordinates;
+
     public King(int pieceID, int positionX, int positionY, Color color, Image image) {
         super(pieceID, positionX, positionY, color, image);
+        this.coordinates = new ArrayList<int[]>();
     }
+
+    public ArrayList<int[]> getCoordinates() {
+        return this.coordinates;
+    }
+
     public void possibleMoves(GridPane board) {
         // Iterate over the possible offsets
         for (int[] offset : offsets) {
@@ -31,12 +41,14 @@ public class King extends Piece{
                         Rectangle rect = (Rectangle) board.getChildren().get(row * board.getRowCount() + col);
                         // Modify the color of the rectangle
                         rect.setFill(Color.CRIMSON);
+                        coordinates.add(new int[] {col, row});
                     }
                 }
                 else{
                     Rectangle rect = (Rectangle) board.getChildren().get(row * board.getRowCount() + col);
                     // Modify the color of the rectangle
                     rect.setFill(Color.CRIMSON);
+                    coordinates.add(new int[] {col, row});
                 }
             }
         }

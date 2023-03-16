@@ -9,12 +9,18 @@ import java.util.ArrayList;
 
 public class Rook extends Piece{
 
+    private ArrayList<int[]> coordinates;
+
     public Rook(int pieceID, int positionX, int positionY, Color color, Image image) {
         super(pieceID, positionX, positionY, color, image);
+        this.coordinates = new ArrayList<int[]>();
     }
-    public void possibleMoves(GridPane board){
-        ArrayList<int[]> coordinates = new ArrayList<int[]>();
 
+    public ArrayList<int[]> getCoordinates() {
+        return this.coordinates;
+    }
+
+    public void possibleMoves(GridPane board){
         // Check moves in the same row to the right
         for(int col = getPositionX() + 1; col < 8; col++){
             if (getPieceAt(col, getPositionY(), board) == null){

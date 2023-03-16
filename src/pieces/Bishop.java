@@ -9,13 +9,18 @@ import java.util.ArrayList;
 
 public class Bishop extends Piece{
 
+    private ArrayList<int[]> coordinates;
+
     public Bishop(int pieceID, int positionX, int positionY, Color color, Image image) {
         super(pieceID, positionX, positionY, color, image);
+        this.coordinates = new ArrayList<int[]>();
+    }
+
+    public ArrayList<int[]> getCoordinates() {
+        return this.coordinates;
     }
 
     public void possibleMoves(GridPane board){
-        ArrayList<int[]> coordinates = new ArrayList<>();
-
         int row = getPositionY(); // get the current row of the bishop
         int col = getPositionX(); // get the current column of the bishop
 

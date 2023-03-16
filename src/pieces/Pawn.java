@@ -10,10 +10,16 @@ import java.util.ArrayList;
 public class Pawn extends Piece{
 
     private boolean isFirstMove;
+    ArrayList<int[]> coordinates;
 
     public Pawn(int pieceID, int positionX, int positionY, Color color, Image image) {
         super(pieceID, positionX, positionY, color, image);
         this.isFirstMove = true;
+        this.coordinates = new ArrayList<int[]>();
+    }
+
+    public ArrayList<int[]> getCoordinates() {
+        return this.coordinates;
     }
 
     public boolean getIsFirstMove() {
@@ -25,7 +31,6 @@ public class Pawn extends Piece{
     }
 
     public void possibleMoves(GridPane board){
-        ArrayList<int[]> coordinates = new ArrayList<int[]>();
         int moveDirection = getColor() == Color.WHITE ? -1 : 1;
 
 

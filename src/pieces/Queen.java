@@ -8,14 +8,18 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 
 public class Queen extends Piece{
+    private ArrayList<int[]> coordinates;
 
     public Queen(int pieceID, int positionX, int positionY, Color color, Image image) {
         super(pieceID, positionX, positionY, color, image);
+        this.coordinates = new ArrayList<int[]>();
+    }
+
+    public ArrayList<int[]> getCoordinates() {
+        return this.coordinates;
     }
 
     public void possibleMoves(GridPane board){
-        ArrayList<int[]> coordinates = new ArrayList<>();
-
         int rowD = getPositionY(); // get the current row of the queen
         int colD = getPositionX(); // get the current column of the queen
 

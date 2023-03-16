@@ -6,6 +6,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
+
 public abstract class Piece {
     private  int pieceID;
     private int positionX;
@@ -93,4 +95,6 @@ public abstract class Piece {
         }
         return null;
     }
+
+    public abstract ArrayList<int[]> getCoordinates();
 }

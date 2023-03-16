@@ -9,9 +9,15 @@ import java.util.ArrayList;
 
 public class Knight extends Piece{
     int[][] possibilities = { {1, 2}, {-1, 2}, {1, -2}, {-1,-2}, {2, 1}, {-2, 1}, {2, -1}, {-2,-1} };
+    private ArrayList<int[]> coordinates;
 
     public Knight(int pieceID, int positionX, int positionY, Color color, Image image) {
         super(pieceID, positionX, positionY, color, image);
+        this.coordinates = new ArrayList<int[]>();
+    }
+
+    public ArrayList<int[]> getCoordinates() {
+        return this.coordinates;
     }
 
     public void possibleMoves(GridPane board){
@@ -26,12 +32,14 @@ public class Knight extends Piece{
                     Rectangle rect = (Rectangle) board.getChildren().get(row * board.getRowCount() + col);
                     // Modify the color of the rectangle
                     rect.setFill(Color.CRIMSON);
+                    coordinates.add(new int[] {col, row});
                 }
                 if(getPieceAt(col, row, board) != null){
                     if(getPieceAt(col, row, board).getColor() != getColor()){
                         Rectangle rect = (Rectangle) board.getChildren().get(row * board.getRowCount() + col);
                         // Modify the color of the rectangle
                         rect.setFill(Color.CRIMSON);
+                        coordinates.add(new int[] {col, row});
                     }
                 }
             }

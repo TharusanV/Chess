@@ -148,9 +148,11 @@ public class Main extends Application {
                             if (isWhiteTurn) {
                                 isWhiteTurn = false;
                                 isBlackTurn = true;
+                                System.out.println(board.isCheckMate(grid, allPieces ,isWhiteTurn));
                             } else {
                                 isWhiteTurn = true;
                                 isBlackTurn = false;
+                                System.out.println(board.isCheckMate(grid, allPieces ,isWhiteTurn));
                             }
                         };
                         numSelectedPieces = 0;
@@ -166,9 +168,11 @@ public class Main extends Application {
                             if (isWhiteTurn) {
                                 isWhiteTurn = false;
                                 isBlackTurn = true;
+                                System.out.println(board.isCheckMate(grid, allPieces ,isWhiteTurn));
                             } else {
                                 isWhiteTurn = true;
                                 isBlackTurn = false;
+                                System.out.println(board.isCheckMate(grid, allPieces ,isWhiteTurn));
                             }
                         };
                         numSelectedPieces = 0;
