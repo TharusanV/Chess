@@ -40,84 +40,20 @@ public class Main extends Application {
 
     ArrayList<Piece> allPieces = new ArrayList<Piece>();
 
-
     public void start(Stage boardStage) {
         try {
             GridPane grid = new GridPane();
             grid.setPrefSize(800, 800);
 
-            int numPawns = 0;
-            int numKings = 0;
-            int numQueens = 0;
-            int numBishops = 0;
-            int numKnights = 0;
-            int numRooks= 0;
+            Board board = new Board(grid);
+            board.resetBoard(grid, allPieces);
 
-            // Create the brown and white checked pattern
-            boolean isWhite = true;
-            for (int row = 0; row < 8; row++) {
-                for (int col = 0; col < 8; col++) {
-                    Rectangle square = new Rectangle(100, 100);
-                    if (isWhite) {
-                        square.setFill(Color.WHITE);
-                    } else {
-                        square.setFill(Color.BROWN);
-                    }
-                    grid.add(square, col, row);
-                    isWhite = !isWhite;
-
-                    // Place pawns on the board
-                    if (row == 1 || row == 6) {
-                        Pawn pawn = new Pawn(numPawns, col, row, (row == 1) ? Color.BLACK : Color.WHITE, (row == 1) ? new Image("assets/black_pawn.png") : new Image("assets/white_pawn.png"));
-                        numPawns++;
-                        pawn.addImageViewToGridPane(grid, col, row);
-                        allPieces.add(pawn);
-                    }
-
-                    // Placing the rest of the pieces
-                    if (row == 0 || row == 7){
-                        if(col == 0 || col == 7){
-                            Rook rook = new Rook(numRooks, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_rook.png") : new Image("assets/white_rook.png"));
-                            numRooks++;
-                            rook.addImageViewToGridPane(grid, col, row);
-                            allPieces.add(rook);
-                        }
-                        if(col == 1 || col == 6){
-                            Knight knight = new Knight(numKnights, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_knight.png") : new Image("assets/white_knight.png"));
-                            numKnights++;
-                            knight.addImageViewToGridPane(grid, col, row);
-                            allPieces.add(knight);
-                        }
-                        if(col == 2 || col == 5){
-                            Bishop bishop = new Bishop(numBishops, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_bishop.png") : new Image("assets/white_bishop.png"));
-                            numBishops++;
-                            bishop.addImageViewToGridPane(grid, col, row);
-                            allPieces.add(bishop);
-                        }
-                        if(col == 3){
-                            Queen queen = new Queen(numQueens, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_queen.png") : new Image("assets/white_queen.png"));
-                            numQueens++;
-                            queen.addImageViewToGridPane(grid, col, row);
-                            allPieces.add(queen);
-                        }
-                        if(col == 4){
-                            King king = new King(numKings, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_King.png") : new Image("assets/white_King.png"));
-                            numKings++;
-                            king.addImageViewToGridPane(grid, col, row);
-                            allPieces.add(king);
-                        }
-                    }
-
-                }
-                isWhite = !isWhite;
-            }
 
             // Set the alignment of the grid to center
             grid.setAlignment(Pos.CENTER);
 
             // Add mouse event listeners to each square
             grid.setOnMouseClicked(event -> {
-                Board board = new Board(grid);
                 Node clickedNode = event.getPickResult().getIntersectedNode();
                 board.updateGridPane(grid, allPieces);
                 if(numSelectedPieces == 0){
@@ -150,11 +86,11 @@ public class Main extends Application {
                             if (isWhiteTurn) {
                                 isWhiteTurn = false;
                                 isBlackTurn = true;
-                                System.out.println(board.isCheckMate(grid, allPieces ,isWhiteTurn));
+                                board.isCheckMate(grid, allPieces ,isWhiteTurn, boardStage);
                             } else {
                                 isWhiteTurn = true;
                                 isBlackTurn = false;
-                                System.out.println(board.isCheckMate(grid, allPieces ,isWhiteTurn));
+                                board.isCheckMate(grid, allPieces ,isWhiteTurn, boardStage);
                             }
                         };
                         numSelectedPieces = 0;
@@ -170,11 +106,11 @@ public class Main extends Application {
                             if (isWhiteTurn) {
                                 isWhiteTurn = false;
                                 isBlackTurn = true;
-                                System.out.println(board.isCheckMate(grid, allPieces ,isWhiteTurn));
+                                board.isCheckMate(grid, allPieces ,isWhiteTurn, boardStage);
                             } else {
                                 isWhiteTurn = true;
                                 isBlackTurn = false;
-                                System.out.println(board.isCheckMate(grid, allPieces ,isWhiteTurn));
+                                board.isCheckMate(grid, allPieces ,isWhiteTurn, boardStage);
                             }
                         };
                         numSelectedPieces = 0;

@@ -1,15 +1,27 @@
 package utility;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import pieces.King;
-import pieces.Pawn;
-import pieces.Piece;
-import pieces.Queen;
+import javafx.stage.Popup;
+import javafx.stage.PopupWindow;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
+
+import pieces.*;
 
 import java.util.ArrayList;
 
@@ -115,7 +127,78 @@ public class Board {
         }
     }
 
-    public String isCheckMate(GridPane grid, ArrayList<Piece> chessPieces, boolean isWhiteTurn) {
+    public void resetBoard(GridPane grid, ArrayList<Piece> allPieces){
+        grid.getChildren().clear();
+        allPieces.clear();
+
+        int numPawns = 0;
+        int numKings = 0;
+        int numQueens = 0;
+        int numBishops = 0;
+        int numKnights = 0;
+        int numRooks= 0;
+
+        // Create the brown and white checked pattern
+        boolean isWhite = true;
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Rectangle square = new Rectangle(100, 100);
+                if (isWhite) {
+                    square.setFill(Color.WHITE);
+                } else {
+                    square.setFill(Color.BROWN);
+                }
+                grid.add(square, col, row);
+                isWhite = !isWhite;
+
+                // Place pawns on the board
+                if (row == 1 || row == 6) {
+                    Pawn pawn = new Pawn(numPawns, col, row, (row == 1) ? Color.BLACK : Color.WHITE, (row == 1) ? new Image("assets/black_pawn.png") : new Image("assets/white_pawn.png"));
+                    numPawns++;
+                    pawn.addImageViewToGridPane(grid, col, row);
+                    allPieces.add(pawn);
+                }
+
+                // Placing the rest of the pieces
+                if (row == 0 || row == 7){
+                    if(col == 0 || col == 7){
+                        Rook rook = new Rook(numRooks, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_rook.png") : new Image("assets/white_rook.png"));
+                        numRooks++;
+                        rook.addImageViewToGridPane(grid, col, row);
+                        allPieces.add(rook);
+                    }
+                    if(col == 1 || col == 6){
+                        Knight knight = new Knight(numKnights, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_knight.png") : new Image("assets/white_knight.png"));
+                        numKnights++;
+                        knight.addImageViewToGridPane(grid, col, row);
+                        allPieces.add(knight);
+                    }
+                    if(col == 2 || col == 5){
+                        Bishop bishop = new Bishop(numBishops, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_bishop.png") : new Image("assets/white_bishop.png"));
+                        numBishops++;
+                        bishop.addImageViewToGridPane(grid, col, row);
+                        allPieces.add(bishop);
+                    }
+                    if(col == 3){
+                        Queen queen = new Queen(numQueens, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_queen.png") : new Image("assets/white_queen.png"));
+                        numQueens++;
+                        queen.addImageViewToGridPane(grid, col, row);
+                        allPieces.add(queen);
+                    }
+                    if(col == 4){
+                        King king = new King(numKings, col, row, (row == 0) ? Color.BLACK : Color.WHITE, (row == 0) ? new Image("assets/black_King.png") : new Image("assets/white_King.png"));
+                        numKings++;
+                        king.addImageViewToGridPane(grid, col, row);
+                        allPieces.add(king);
+                    }
+                }
+
+            }
+            isWhite = !isWhite;
+        }
+    }
+
+    public void isCheckMate(GridPane grid, ArrayList<Piece> chessPieces, boolean isWhiteTurn, Stage boardStage) {
         int[][] offsets = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
         Piece king = null;
         ArrayList<int[]> kingMoves = new ArrayList<>();
@@ -166,15 +249,44 @@ public class Board {
             }
         }
 
-        System.out.println(kingMoves.size());
+        //System.out.println(kingMoves.size());
+        Popup popup = new Popup();
+        popup.setAutoHide(true);
 
         if(kingMoves.isEmpty() && numOfAttackOps > 0){
-            return (isWhiteTurn ? "Black Win" : "White Win");
+            Label label = new Label((isWhiteTurn ? "Black Win" : "White Win"));
+            label.setStyle("-fx-font-weight: bold; -fx-font-size: 64px; -fx-text-fill: red;");
+
+            Button resetButton = new Button("Restart");
+            resetButton.setOnAction(event -> {
+                resetBoard(grid, chessPieces);
+                popup.hide();
+            });
+
+            resetButton.setStyle("-fx-border-color: #ffffff; -fx-border-width: 0;");
+
+            VBox popupContent = new VBox(label, resetButton);
+            popupContent.setAlignment(Pos.CENTER);
+            popupContent.setSpacing(10);
+
+            popup.getContent().add(popupContent);
+            popup.setHideOnEscape(false);
+            popup.setAnchorLocation(PopupWindow.AnchorLocation.WINDOW_BOTTOM_LEFT);
+            popup.show(boardStage);
+
         } else if(kingMoves.size() < 8 && kingMoves.size() > 0  && numOfAttackOps > 0){
-            return (isWhiteTurn ? "White in check" : "Black in check");
+
+            Label label = new Label((isWhiteTurn ? "White in check" : "Black in check"));
+            label.setStyle("-fx-font-weight: bold; -fx-font-size: 64px; -fx-text-fill: blue;");
+            popup.getContent().add(label);
+            popup.show(boardStage);
+
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), ev -> {
+                popup.hide();
+            }));
+            timeline.play();
         }
 
-        return "1"; // the player is not in check
     }
 
 
