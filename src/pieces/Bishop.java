@@ -21,6 +21,8 @@ public class Bishop extends Piece{
     }
 
     public void possibleMoves(GridPane board){
+        coordinates.clear();
+
         int row = getPositionY(); // get the current row of the bishop
         int col = getPositionX(); // get the current column of the bishop
 
@@ -68,11 +70,14 @@ public class Bishop extends Piece{
                 break; // can't move further in this direction
             }
         }
-        // Loop through the coordinates in the ArrayList
+
+    }
+
+    public void possibleMovesShown(GridPane board){
         for (int[] coord : coordinates) {
             // Get the row and column indexes of the rectangle
-            row = coord[1];
-            col = coord[0];
+            int row = coord[1];
+            int col = coord[0];
 
             if(getPieceAt(col, row, board) == null){
                 // Get the rectangle at the row and column index
@@ -90,8 +95,6 @@ public class Bishop extends Piece{
             }
 
         }
-
-
     }
 
     public boolean canMove(int possibleMoveX, int possibleMoveY, GridPane board) {

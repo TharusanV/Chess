@@ -128,9 +128,11 @@ public class Main extends Application {
                         selectedPiece = board.getPieceAt(colIndex, rowIndex, grid);
                         if (selectedPiece.getColor() == Color.WHITE && isWhiteTurn) {
                             selectedPiece.possibleMoves(grid);
+                            selectedPiece.possibleMovesShown(grid);
                             numSelectedPieces++;
                         } else if (selectedPiece.getColor() == Color.BLACK && !isWhiteTurn) {
                             selectedPiece.possibleMoves(grid);
+                            selectedPiece.possibleMovesShown(grid);
                             numSelectedPieces++;
                         }
                     }

@@ -20,6 +20,7 @@ public class Queen extends Piece{
     }
 
     public void possibleMoves(GridPane board){
+        coordinates.clear();
         int rowD = getPositionY(); // get the current row of the queen
         int colD = getPositionX(); // get the current column of the queen
 
@@ -122,8 +123,9 @@ public class Queen extends Piece{
                 break;
             }
         }
+    }
 
-        // Loop through the coordinates in the ArrayList
+    public void possibleMovesShown(GridPane board){
         for (int[] coord : coordinates) {
             // Get the row and column indexes of the rectangle
             int row = coord[1];

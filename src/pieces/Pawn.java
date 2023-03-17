@@ -31,8 +31,8 @@ public class Pawn extends Piece{
     }
 
     public void possibleMoves(GridPane board){
+        coordinates.clear();
         int moveDirection = getColor() == Color.WHITE ? -1 : 1;
-
 
         if(getPieceAt(getPositionX(), getPositionY() + moveDirection, board) == null){
             coordinates.add(new int[] {getPositionX(), getPositionY() + moveDirection});
@@ -55,7 +55,9 @@ public class Pawn extends Piece{
             }
         }
 
-        // Loop through the coordinates in the ArrayList
+    }
+
+    public void possibleMovesShown(GridPane board){
         for (int[] coord : coordinates) {
             // Get the row and column indexes of the rectangle
             int row = coord[1];
@@ -77,7 +79,6 @@ public class Pawn extends Piece{
             }
 
         }
-
     }
 
     public boolean canMove(int possibleMoveX, int possibleMoveY, GridPane board) {

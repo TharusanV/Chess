@@ -120,45 +120,53 @@ public class Board {
         Piece king = null;
         ArrayList<int[]> kingMoves = new ArrayList<>();
         ArrayList<Piece> opponentPieces = new ArrayList<>();
+        kingMoves.clear();
+        opponentPieces.clear();
         int numOfAttackOps = 0;
 
         for (Piece piece : chessPieces) {
-            if(piece.getColor() == (isWhiteTurn ? Color.WHITE : Color.BLACK)){
-                if(piece instanceof King){
+            if (piece.getColor() == (isWhiteTurn ? Color.WHITE : Color.BLACK)) {
+                if (piece instanceof King) {
                     king = piece;
-                    kingMoves.addAll(king.getCoordinates());
+                    for (int[] move : offsets) {
+                        int row = king.getPositionY() + move[0];
+                        int col = king.getPositionX() + move[1];
+                        if (row >= 0 && row < board.getRowCount() && col >= 0 && col < board.getColumnCount()) {
+                            if (getPieceAt(col, row, board) != null) {
+                                if (getPieceAt(col, row, board).getColor() != king.getColor()) {
+                                    System.out.println(col + "," + row);
+                                    kingMoves.add(new int[]{col, row});
+                                }
+                            } else {
+                                kingMoves.add(new int[]{col, row});
+                            }
+
+                        }
+                    }
                 }
             } else {
                 opponentPieces.add(piece);
             }
         }
 
-        System.out.println("King moves: " + kingMoves);
-
-        for (int[] move : kingMoves) {
-            System.out.println(move[0] + ", " + move[1]);
-        }
 
         for (Piece piece : opponentPieces) {
-            for (int[] coord : offsets) {
-                int row = coord[1];
-                int col = coord[0];
-                for (int[] possible : piece.getCoordinates()){
+            for (int[] offset : offsets) {
+                int row = king.getPositionY() + offset[0];
+                int col = king.getPositionX() + offset[1];
+                piece.possibleMoves(grid);
+                for (int[] possible : piece.getCoordinates()) {
                     int y = possible[1];
                     int x = possible[0];
-                    if((col + x) == king.getPositionX() && (row + y) == king.getPositionY()){
-                        kingMoves.removeIf(move -> (move[0] == x && move[1] == y));
+                    if (col == x && row == y) {
+                        kingMoves.removeIf(move -> (move[0] == col && move[1] == row));
                         numOfAttackOps++;
                     }
                 }
             }
         }
 
-        System.out.println("King moves: " + kingMoves);
-
-        for (int[] move : kingMoves) {
-            System.out.println(move[0] + ", " + move[1]);
-        }
+        System.out.println(kingMoves.size());
 
         if(kingMoves.isEmpty() && numOfAttackOps > 0){
             return (isWhiteTurn ? "Black Win" : "White Win");

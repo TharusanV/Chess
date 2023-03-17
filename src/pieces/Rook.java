@@ -21,6 +21,8 @@ public class Rook extends Piece{
     }
 
     public void possibleMoves(GridPane board){
+        coordinates.clear();
+
         // Check moves in the same row to the right
         for(int col = getPositionX() + 1; col < 8; col++){
             if (getPieceAt(col, getPositionY(), board) == null){
@@ -75,7 +77,9 @@ public class Rook extends Piece{
                 break;
             }
         }
+    }
 
+    public void possibleMovesShown(GridPane board){
         for (int[] coord : coordinates) {
             // Get the row and column indexes of the rectangle
             int row = coord[1];
@@ -97,8 +101,6 @@ public class Rook extends Piece{
             }
 
         }
-
-
     }
 
     public boolean canMove(int possibleMoveX, int possibleMoveY, GridPane board) {

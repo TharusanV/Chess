@@ -97,4 +97,6 @@ public abstract class Piece {
     }
 
     public abstract ArrayList<int[]> getCoordinates();
+
+    public abstract void possibleMovesShown(GridPane board);
 }

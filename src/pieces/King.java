@@ -27,6 +27,7 @@ public class King extends Piece{
     }
 
     public void possibleMoves(GridPane board) {
+        coordinates.clear();
         // Iterate over the possible offsets
         for (int[] offset : offsets) {
             // Calculate the row and column indexes of the potential move
@@ -37,20 +38,37 @@ public class King extends Piece{
             if (row >= 0 && row < board.getRowCount() && col >= 0 && col < board.getColumnCount()) {
                 if(getPieceAt(col, row, board) != null){
                     if(getPieceAt(col, row, board).getColor() != getColor()){
-                        // Get the rectangle at the row and column index
-                        Rectangle rect = (Rectangle) board.getChildren().get(row * board.getRowCount() + col);
-                        // Modify the color of the rectangle
-                        rect.setFill(Color.CRIMSON);
                         coordinates.add(new int[] {col, row});
                     }
                 }
                 else{
-                    Rectangle rect = (Rectangle) board.getChildren().get(row * board.getRowCount() + col);
-                    // Modify the color of the rectangle
-                    rect.setFill(Color.CRIMSON);
                     coordinates.add(new int[] {col, row});
                 }
             }
+        }
+    }
+
+    public void possibleMovesShown(GridPane board){
+        for (int[] coord : coordinates) {
+            // Get the row and column indexes of the rectangle
+            int row = coord[1];
+            int col = coord[0];
+
+            if(getPieceAt(col, row, board) == null){
+                // Get the rectangle at the row and column index
+                Rectangle rect = (Rectangle) board.getChildren().get(row * board.getRowCount() + col);
+
+                // Modify the color of the rectangle
+                rect.setFill(Color.CRIMSON);
+            }
+            if(getPieceAt(col, row, board) != null) {
+                if (getPieceAt(col, row, board).getColor() != getColor()) {
+                    Rectangle rect = (Rectangle) board.getChildren().get(row * board.getRowCount() + col);
+                    // Modify the color of the rectangle
+                    rect.setFill(Color.CRIMSON);
+                }
+            }
+
         }
     }
 
