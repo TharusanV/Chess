@@ -9,11 +9,12 @@ import javax.swing.JPanel;
 
 import ui.Board;
 import utility.KeyHandler;
+import utility.MouseHandler;
 
 public class GamePanel extends JPanel implements Runnable {
 	
 	private final KeyHandler keyHandler = new KeyHandler(this);
-	
+	private final MouseHandler mouseHandler = new MouseHandler(this);
 	
 	private final int tileSize = 64;
 	private final int maxScreenCol = 8;
@@ -32,7 +33,11 @@ public class GamePanel extends JPanel implements Runnable {
 		this.setDoubleBuffered(true); //Enables better rendering performance
 		
 		this.setBackground(Color.black);
+		
 		this.addKeyListener(keyHandler);
+		this.addMouseListener(mouseHandler); 
+		this.addMouseMotionListener(mouseHandler);
+		
 		this.setFocusable(true);
 		
 	}
@@ -69,7 +74,7 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 	
 	public void update() {
-		
+	
 	}
 	
 	public void paintComponent(Graphics g) {

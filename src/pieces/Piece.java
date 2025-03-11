@@ -2,8 +2,11 @@ package pieces;
 
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import main.GamePanel;
 
@@ -21,7 +24,14 @@ public class Piece {
 	}
 
 	
-	
+	public void loadPieceIcon(String name) {
+		try {
+			this.pieceImage = ImageIO.read(getClass().getResourceAsStream("/pieces/"+ name + ".png"));
+			
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -64,12 +74,12 @@ public class Piece {
 		this.pieceImage = pieceImage;
 	}
 
-	public List<Point> getAllPossibleMoves() {
-		return allPossibleMoves;
+	public List<Point> getAllPossibleMovesList() {
+		return allPossibleMovesList;
 	}
 
-	public void setAllPossibleMoves(List<Point> allPossibleMoves) {
-		this.allPossibleMoves = allPossibleMoves;
+	public void setAllPossibleMoves(List<Point> allPossibleMovesList) {
+		this.allPossibleMovesList = allPossibleMovesList;
 	}
 	
 	

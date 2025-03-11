@@ -15,11 +15,13 @@ public class Pawn extends Piece {
 		this.colour = p_colour;
 		
 		this.startingPosRow = p_startingPos.y;
+		
+		loadPieceIcon(p_colour + "_pawn");
 	}
 
 	public void findPossibleMoves() {
 		allPossibleMovesList.clear();
-		int moveDirection = colour == "White" ? -1 : 1;
+		int moveDirection = colour == "white" ? -1 : 1;
 		
 		//Straight
 		if(gp.getBoard().checkTileForPiece(currentPos.x, currentPos.y + moveDirection) == null) {
@@ -32,11 +34,19 @@ public class Pawn extends Piece {
 			}
 		}
 		
-		//Possible diagonal (left White / right Black)
+		//Possible diagonal (left White / right Black (flipped left))
+		if(gp.getBoard().checkTileForPiece(currentPos.x - moveDirection, currentPos.y + moveDirection) != null) {
+			if(gp.getBoard().checkTileForPiece(currentPos.x - moveDirection, currentPos.y + moveDirection).getColour() != colour) {
+				allPossibleMovesList.add(new Point(currentPos.x - moveDirection, currentPos.y + moveDirection));
+			}
+		}
 		
-		
-		
-		
+		//Possible diagonal (right White / left Black (flipped right))
+		if(gp.getBoard().checkTileForPiece(currentPos.x + moveDirection, currentPos.y + moveDirection) != null) {
+			if(gp.getBoard().checkTileForPiece(currentPos.x + moveDirection, currentPos.y + moveDirection).getColour() != colour) {
+				allPossibleMovesList.add(new Point(currentPos.x + moveDirection, currentPos.y + moveDirection));
+			}
+		}
 	}
 	
 }

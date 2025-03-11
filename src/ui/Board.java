@@ -2,73 +2,41 @@ package ui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 
 import main.GamePanel;
+import pieces.Bishop;
+import pieces.King;
+import pieces.Knight;
 import pieces.Pawn;
 import pieces.Piece;
+import pieces.Queen;
+import pieces.Rook;
 
 public class Board {
 
 	private GamePanel gp;
-	private Piece[][] board;
+	private Color[][] allTiles;
+	private Piece[][] currentBoard;
+	
+	Color myWhite = new Color(240, 217, 181);
+	Color myBrown = new Color(181, 136, 99);
 	
 	public Board(GamePanel p_gp) {
 		this.gp = p_gp;
 		
-		board = new Piece[8][8]; 
+		allTiles = new Color[8][8];
+		currentBoard = new Piece[8][8]; 
 		initialiseBoard();
 	}
 	
 	private void initialiseBoard() {
-		//Pawns
-		for(int i = 0; i < 8; i++) {
-			board[i][1] = new Pawn(gp, "Black");
-			board[i][6] = new Pawn(gp, "White");	
-		}
-		
-		//Rook
-		board[0][0] = new Rook(gp, "Black");
-		board[7][0] = new Rook(gp, "Black");
-		board[0][7] = new Rook(gp, "White");
-		board[7][7] = new Rook(gp, "White");
-		
-		//Knight
-		board[1][0] = new Knight(gp, "Black");
-		board[6][0] = new Knight(gp, "Black");
-		board[1][7] = new Knight(gp, "White");
-		board[6][7] = new Knight(gp, "White");
-		
-		//Bishop
-		board[2][0] = new Bishop(gp, "Black");
-		board[5][0] = new Bishop(gp, "Black");
-		board[2][7] = new Bishop(gp, "White");
-		board[5][7] = new Bishop(gp, "White");
-		
-		//King
-		board[3][0] = new King(gp, "Black");
-		board[3][7] = new King(gp, "White");
-		
-		//Queen
-		board[4][0] = new Queen(gp, "Black");
-		board[4][7] = new Queen(gp, "White");
-	}
-
-	public void draw(Graphics2D p_g2) {
 		int col = 0;
 		int row = 0;
 		
 		while(col < gp.getMaxScreenCol() && row < gp.getMaxScreenRow()) {
-			if((row + col) % 2 == 0) {
-				p_g2.setColor(Color.WHITE);
-			}
-			else {
-				p_g2.setColor(Color.RED);
-			}
-			
-			int x = col * gp.getTileSize();
-			int y = row * gp.getTileSize();
-			
-			p_g2.fillRect(x, y, gp.getTileSize(), gp.getTileSize());
+			if((row + col) % 2 == 0) {allTiles[col][row] = myWhite;}
+			else {allTiles[col][row] = myBrown;}
 			
 			col++;
 			
@@ -79,12 +47,72 @@ public class Board {
 		}
 		
 		
+		//Pawns
+		for(int i = 0; i < 8; i++) {
+			currentBoard[i][1] = new Pawn(gp, new Point(i, 1), "black");
+			currentBoard[i][6] = new Pawn(gp, new Point(i, 6), "white");	
+		}
+		
+		// Rook
+		currentBoard[0][0] = new Rook(gp, new Point(0, 0), "black");
+		currentBoard[7][0] = new Rook(gp, new Point(7, 0), "black");
+		currentBoard[0][7] = new Rook(gp, new Point(0, 7), "white");
+		currentBoard[7][7] = new Rook(gp, new Point(7, 7), "white");
+
+		// Knight
+		currentBoard[1][0] = new Knight(gp, new Point(1, 0), "black");
+		currentBoard[6][0] = new Knight(gp, new Point(6, 0), "black");
+		currentBoard[1][7] = new Knight(gp, new Point(1, 7), "white");
+		currentBoard[6][7] = new Knight(gp, new Point(6, 7), "white");
+
+		// Bishop
+		currentBoard[2][0] = new Bishop(gp, new Point(2, 0), "black");
+		currentBoard[5][0] = new Bishop(gp, new Point(5, 0), "black");
+		currentBoard[2][7] = new Bishop(gp, new Point(2, 7), "white");
+		currentBoard[5][7] = new Bishop(gp, new Point(5, 7), "white");
+
+		// King
+		currentBoard[3][0] = new King(gp, new Point(3, 0), "black");
+		currentBoard[3][7] = new King(gp, new Point(3, 7), "white");
+
+		// Queen
+		currentBoard[4][0] = new Queen(gp, new Point(4, 0), "black");
+		currentBoard[4][7] = new Queen(gp, new Point(4, 7), "white");
+
+		
+	}
+
+	public void draw(Graphics2D p_g2) {
+		int col = 0;
+		int row = 0;
+		
+		while(col < gp.getMaxScreenCol() && row < gp.getMaxScreenRow()) {
+			if((row + col) % 2 == 0) {p_g2.setColor(myWhite);}
+			else {p_g2.setColor(myBrown);}
+			
+			int x = col * gp.getTileSize();
+			int y = row * gp.getTileSize();
+			
+			p_g2.fillRect(x, y, gp.getTileSize(), gp.getTileSize());
+			
+			//Draw Piece
+			if(checkTileForPiece(col, row) != null) {
+				p_g2.drawImage(checkTileForPiece(col, row).getPieceImage(), x, y, gp.getTileSize(), gp.getTileSize(), null);
+			}
+			
+			col++;
+			
+			if(col == gp.getMaxScreenCol()) {
+				col = 0;
+				row++;
+			}
+		}
 	}
 	
 	
 	public Piece checkTileForPiece(int col, int row) {
-		if(board[col][row] != null) {
-			return board[col][row];
+		if(currentBoard[col][row] != null) {
+			return currentBoard[col][row];
 		}
 		
 		return null;
