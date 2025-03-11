@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import pieces.Piece;
 import ui.Board;
 import utility.KeyHandler;
 import utility.MouseHandler;
@@ -24,7 +25,11 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	private final int FPS = 60;
 	
+	
 	private Board board = new Board(this);
+	
+	private boolean playerIsWhite = true;
+	private Piece selectedPiece = null;
 	
 	Thread gameThread;
 	
@@ -74,7 +79,7 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 	
 	public void update() {
-	
+		board.update();
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -118,6 +123,22 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public void setBoard(Board board) {
 		this.board = board;
+	}
+
+	public Piece getSelectedPiece() {
+		return selectedPiece;
+	}
+
+	public void setSelectedPiece(Piece selectedPiece) {
+		this.selectedPiece = selectedPiece;
+	}
+
+	public boolean isPlayerIsWhite() {
+		return playerIsWhite;
+	}
+
+	public void setPlayerIsWhite(boolean playerIsWhite) {
+		this.playerIsWhite = playerIsWhite;
 	}
 	
 	

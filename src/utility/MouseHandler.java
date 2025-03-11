@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import main.GamePanel;
+import pieces.Piece;
 
 public class MouseHandler implements MouseListener, MouseMotionListener {
 
@@ -19,7 +20,23 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
         if (e.getButton() == MouseEvent.BUTTON1) { // Left mouse button
             int x = e.getX();
             int y = e.getY();
-            System.out.println("Left Click at: (" + x + ", " + y + ")");
+            
+            
+            int col = (int) Math.floor(x / gamePanel.getTileSize());
+            int row = (int) Math.floor(y / gamePanel.getTileSize());
+            
+            if(gamePanel.getBoard().checkTileForPiece(col, row) != null) {
+            	Piece potentialPiece = gamePanel.getBoard().checkTileForPiece(col, row);
+            	if(potentialPiece.getColour() == "white" && gamePanel.isPlayerIsWhite()) {
+            		gamePanel.setSelectedPiece(potentialPiece);
+            	}
+            	else if(potentialPiece.getColour() == "black" && gamePanel.isPlayerIsWhite() == false) {
+            		gamePanel.setSelectedPiece(potentialPiece);
+            	}
+            }
+            
+            
+            System.out.println(gamePanel.getSelectedPiece());
         }
     }
 

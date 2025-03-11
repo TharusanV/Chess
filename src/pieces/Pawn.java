@@ -27,7 +27,7 @@ public class Pawn extends Piece {
 		if(gp.getBoard().checkTileForPiece(currentPos.x, currentPos.y + moveDirection) == null) {
 			allPossibleMovesList.add(new Point(currentPos.x, currentPos.y + moveDirection));
 			//Check if they can move two points forward
-			if(currentPos.y != startingPosRow) {
+			if(currentPos.y == startingPosRow) {
 				if(gp.getBoard().checkTileForPiece(currentPos.x, currentPos.y + moveDirection * 2) == null) {
 					allPossibleMovesList.add(new Point(currentPos.x, currentPos.y + moveDirection * 2));
 				}
@@ -35,16 +35,21 @@ public class Pawn extends Piece {
 		}
 		
 		//Possible diagonal (left White / right Black (flipped left))
-		if(gp.getBoard().checkTileForPiece(currentPos.x - moveDirection, currentPos.y + moveDirection) != null) {
-			if(gp.getBoard().checkTileForPiece(currentPos.x - moveDirection, currentPos.y + moveDirection).getColour() != colour) {
-				allPossibleMovesList.add(new Point(currentPos.x - moveDirection, currentPos.y + moveDirection));
+		if((currentPos.x - moveDirection >= 0) && (currentPos.x - moveDirection < 8) && (currentPos.y + moveDirection >= 0) && (currentPos.y + moveDirection < 8)) {
+			if(gp.getBoard().checkTileForPiece(currentPos.x - moveDirection, currentPos.y + moveDirection) != null) {
+				if(gp.getBoard().checkTileForPiece(currentPos.x - moveDirection, currentPos.y + moveDirection).getColour() != colour) {
+					allPossibleMovesList.add(new Point(currentPos.x - moveDirection, currentPos.y + moveDirection));
+				}
 			}
 		}
 		
+		
 		//Possible diagonal (right White / left Black (flipped right))
-		if(gp.getBoard().checkTileForPiece(currentPos.x + moveDirection, currentPos.y + moveDirection) != null) {
-			if(gp.getBoard().checkTileForPiece(currentPos.x + moveDirection, currentPos.y + moveDirection).getColour() != colour) {
-				allPossibleMovesList.add(new Point(currentPos.x + moveDirection, currentPos.y + moveDirection));
+		if((currentPos.x + moveDirection >= 0) && (currentPos.x + moveDirection < 8) && (currentPos.y + moveDirection >= 0) && (currentPos.y + moveDirection < 8)) {
+			if(gp.getBoard().checkTileForPiece(currentPos.x + moveDirection, currentPos.y + moveDirection) != null) {
+				if(gp.getBoard().checkTileForPiece(currentPos.x + moveDirection, currentPos.y + moveDirection).getColour() != colour) {
+					allPossibleMovesList.add(new Point(currentPos.x + moveDirection, currentPos.y + moveDirection));
+				}
 			}
 		}
 	}

@@ -16,7 +16,9 @@ import pieces.Rook;
 public class Board {
 
 	private GamePanel gp;
-	private Color[][] allTiles;
+	Graphics2D g2;
+	
+	private Color[][] defaultTilesColours;
 	private Piece[][] currentBoard;
 	
 	Color myWhite = new Color(240, 217, 181);
@@ -25,7 +27,7 @@ public class Board {
 	public Board(GamePanel p_gp) {
 		this.gp = p_gp;
 		
-		allTiles = new Color[8][8];
+		defaultTilesColours = new Color[8][8];
 		currentBoard = new Piece[8][8]; 
 		initialiseBoard();
 	}
@@ -35,8 +37,8 @@ public class Board {
 		int row = 0;
 		
 		while(col < gp.getMaxScreenCol() && row < gp.getMaxScreenRow()) {
-			if((row + col) % 2 == 0) {allTiles[col][row] = myWhite;}
-			else {allTiles[col][row] = myBrown;}
+			if((row + col) % 2 == 0) {defaultTilesColours[col][row] = myWhite;}
+			else {defaultTilesColours[col][row] = myBrown;}
 			
 			col++;
 			
@@ -78,26 +80,29 @@ public class Board {
 		// Queen
 		currentBoard[4][0] = new Queen(gp, new Point(4, 0), "black");
 		currentBoard[4][7] = new Queen(gp, new Point(4, 7), "white");
-
-		
 	}
 
 	public void draw(Graphics2D p_g2) {
+		this.g2 = p_g2;
+		
 		int col = 0;
 		int row = 0;
 		
 		while(col < gp.getMaxScreenCol() && row < gp.getMaxScreenRow()) {
-			if((row + col) % 2 == 0) {p_g2.setColor(myWhite);}
-			else {p_g2.setColor(myBrown);}
-			
 			int x = col * gp.getTileSize();
 			int y = row * gp.getTileSize();
 			
-			p_g2.fillRect(x, y, gp.getTileSize(), gp.getTileSize());
+			if(gp.getSelectedPiece() != null && gp.getSelectedPiece().getAllPossibleMovesList().contains(new Point(col, row))) {
+				g2.setColor(Color.GRAY);
+			}
+			else {
+				g2.setColor(defaultTilesColours[col][row]);
+			}
 			
-			//Draw Piece
+			g2.fillRect(x, y, gp.getTileSize(), gp.getTileSize());
+			
 			if(checkTileForPiece(col, row) != null) {
-				p_g2.drawImage(checkTileForPiece(col, row).getPieceImage(), x, y, gp.getTileSize(), gp.getTileSize(), null);
+				g2.drawImage(checkTileForPiece(col, row).getPieceImage(), x, y, gp.getTileSize(), gp.getTileSize(), null);
 			}
 			
 			col++;
@@ -109,6 +114,11 @@ public class Board {
 		}
 	}
 	
+	public void update() {
+		if(gp.getSelectedPiece() != null) {
+			gp.getSelectedPiece().findPossibleMoves();
+		}
+	}
 	
 	public Piece checkTileForPiece(int col, int row) {
 		if(currentBoard[col][row] != null) {
