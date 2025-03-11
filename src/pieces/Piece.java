@@ -1,102 +1,78 @@
 package pieces;
 
-import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-
+import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 
-public abstract class Piece {
-    private  int pieceID;
-    private int positionX;
-    private int positionY;
-    private Color color;
-    private Image image;
+import main.GamePanel;
 
-    private ImageView imageView;
+public class Piece {
 
-    public Piece(int pieceID, int positionX, int positionY, Color color, Image image) {
-        this.pieceID = pieceID;
-        this.positionX = positionX;
-        this.positionY = positionY;
-        this.color = color;
-        this.image = image;
-        this.imageView = new ImageView(image);
-    }
+	GamePanel gp;
+	int id;
+	Point currentPos;
+	String colour;
+	BufferedImage pieceImage;
+	List<Point> allPossibleMovesList = new ArrayList<>();
+	
+	public Piece(GamePanel p_gp) {
+		this.gp = p_gp;
+	}
 
-    public int getPositionX() {
-        return positionX;
-    }
-
-    public void setPositionX(int positionX) {
-        this.positionX = positionX;
-    }
-
-    public int getPositionY() {
-        return positionY;
-    }
-
-    public void setPositionY(int positionY) {
-        this.positionY = positionY;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    public Image getImage() {
-        return image;
-    }
-
-    public void setImage(Image image) {
-        this.image = image;
-    }
-
-    public ImageView getImageView(){
-        return this.imageView;
-    }
-
-    public void setImageViewPosition(double x, double y, GridPane grid) {
-        this.setPositionX((int) x);
-        this.setPositionY((int) y);
-        GridPane.setRowIndex(this.imageView, (int) y);
-        GridPane.setColumnIndex(this.imageView, (int) x);
-    }
-
-    public abstract boolean canMove(int x, int y, GridPane board);
-
-    public abstract void possibleMoves(GridPane board);
-
-    public ImageView addImageViewToGridPane(GridPane gridPane, int column, int row) {
-
-        this.getImageView().setFitWidth(100);
-        this.getImageView().setFitHeight(100);
-        GridPane.setConstraints(this.getImageView(), column, row);
-        gridPane.getChildren().add(this.getImageView());
-        this.getImageView().setUserData(this);
-        return this.getImageView();
-    }
+	
+	
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public int getId() {
+		return id;
+	}
 
 
-    public Piece getPieceAt(int x, int y, GridPane board) {
-        for (Node node : board.getChildren()) {
-            if (board.getColumnIndex(node) == x && board.getRowIndex(node) == y) {
-                if (node instanceof ImageView) {
-                    Piece piece = (Piece) node.getUserData();
-                    return piece;
-                }
-            }
-        }
-        return null;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public abstract ArrayList<int[]> getCoordinates();
 
-    public abstract void possibleMovesShown(GridPane board);
+	public Point getCurrentPos() {
+		return currentPos;
+	}
+
+
+	public void setCurrentPos(Point pos) {
+		this.currentPos = pos;
+	}
+
+
+	public String getColour() {
+		return colour;
+	}
+
+
+	public void setColour(String colour) {
+		this.colour = colour;
+	}
+
+
+	public BufferedImage getPieceImage() {
+		return pieceImage;
+	}
+
+
+	public void setPieceImage(BufferedImage pieceImage) {
+		this.pieceImage = pieceImage;
+	}
+
+	public List<Point> getAllPossibleMoves() {
+		return allPossibleMoves;
+	}
+
+	public void setAllPossibleMoves(List<Point> allPossibleMoves) {
+		this.allPossibleMoves = allPossibleMoves;
+	}
+	
+	
+	
+	
 }
