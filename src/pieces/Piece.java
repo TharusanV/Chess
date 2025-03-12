@@ -52,8 +52,9 @@ public class Piece {
 	}
 
 
-	public void setCurrentPos(Point pos) {
-		this.currentPos = pos;
+	public void setCurrentPos(int newCol, int newRow) {
+		this.currentPos.x = newCol;
+		this.currentPos.y = newRow;
 	}
 
 

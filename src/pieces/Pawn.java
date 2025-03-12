@@ -24,12 +24,14 @@ public class Pawn extends Piece {
 		int moveDirection = colour == "white" ? -1 : 1;
 		
 		//Straight
-		if(gp.getBoard().checkTileForPiece(currentPos.x, currentPos.y + moveDirection) == null) {
-			allPossibleMovesList.add(new Point(currentPos.x, currentPos.y + moveDirection));
-			//Check if they can move two points forward
-			if(currentPos.y == startingPosRow) {
-				if(gp.getBoard().checkTileForPiece(currentPos.x, currentPos.y + moveDirection * 2) == null) {
-					allPossibleMovesList.add(new Point(currentPos.x, currentPos.y + moveDirection * 2));
+		if((currentPos.y + moveDirection >= 0) && (currentPos.y + moveDirection < 8)) {
+			if(gp.getBoard().checkTileForPiece(currentPos.x, currentPos.y + moveDirection) == null) {
+				allPossibleMovesList.add(new Point(currentPos.x, currentPos.y + moveDirection));
+				//Check if they can move two points forward
+				if(currentPos.y == startingPosRow) {
+					if(gp.getBoard().checkTileForPiece(currentPos.x, currentPos.y + moveDirection * 2) == null) {
+						allPossibleMovesList.add(new Point(currentPos.x, currentPos.y + moveDirection * 2));
+					}
 				}
 			}
 		}

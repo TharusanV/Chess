@@ -93,6 +93,26 @@ public class GamePanel extends JPanel implements Runnable {
 		g2.dispose(); //Save memory after the drawing is created
 	}
 
+	
+	
+	public void attemptChangeSelectedPiece(int col, int row) {
+		if(board.checkTileForPiece(col, row) != null) {
+        	Piece potentialPiece = board.checkTileForPiece(col, row);
+        	if(potentialPiece.getColour() == "white" && isPlayerIsWhite()) {
+        		setSelectedPiece(potentialPiece);
+        	}
+        	else if(potentialPiece.getColour() == "black" && isPlayerIsWhite() == false) {
+        		setSelectedPiece(potentialPiece);
+        	}
+        }
+	}
+	
+	
+	
+	
+	
+	///////////////////////////////////////////////////////////////////////////
+	
 	public KeyHandler getKeyHandler() {
 		return keyHandler;
 	}

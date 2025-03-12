@@ -21,7 +21,7 @@ public class Knight extends Piece {
 		this.currentPos = p_startingPos;
 		this.colour = p_colour;
 		
-		loadPieceIcon(p_colour + "_queen");
+		loadPieceIcon(p_colour + "_knight");
 	}
 	
 	public void findPossibleMoves() {

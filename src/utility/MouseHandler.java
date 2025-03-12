@@ -1,5 +1,6 @@
 package utility;
 
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -25,18 +26,21 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
             int col = (int) Math.floor(x / gamePanel.getTileSize());
             int row = (int) Math.floor(y / gamePanel.getTileSize());
             
-            if(gamePanel.getBoard().checkTileForPiece(col, row) != null) {
-            	Piece potentialPiece = gamePanel.getBoard().checkTileForPiece(col, row);
-            	if(potentialPiece.getColour() == "white" && gamePanel.isPlayerIsWhite()) {
-            		gamePanel.setSelectedPiece(potentialPiece);
+            if(gamePanel.getSelectedPiece() == null) {
+            	gamePanel.attemptChangeSelectedPiece(col, row);
+            }
+            else {
+            	//Move Piece
+            	if(gamePanel.getSelectedPiece().getAllPossibleMovesList().contains(new Point(col, row))){
+            		gamePanel.getBoard().movePiece(col, row);
             	}
-            	else if(potentialPiece.getColour() == "black" && gamePanel.isPlayerIsWhite() == false) {
-            		gamePanel.setSelectedPiece(potentialPiece);
+            	else{ //Change Piece
+            		gamePanel.attemptChangeSelectedPiece(col, row);
             	}
+            	
             }
             
-            
-            System.out.println(gamePanel.getSelectedPiece());
+            //System.out.println(gamePanel.getSelectedPiece());
         }
     }
 

@@ -1,5 +1,6 @@
 package ui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -94,12 +95,18 @@ public class Board {
 			
 			if(gp.getSelectedPiece() != null && gp.getSelectedPiece().getAllPossibleMovesList().contains(new Point(col, row))) {
 				g2.setColor(Color.GRAY);
+				g2.fillRect(x, y, gp.getTileSize() - 3, gp.getTileSize() - 3);
+				
+				g2.setStroke(new BasicStroke(3));
+				g2.setColor(Color.BLACK);
+				g2.drawRect(x, y, gp.getTileSize(), gp.getTileSize());
 			}
 			else {
 				g2.setColor(defaultTilesColours[col][row]);
+				g2.fillRect(x, y, gp.getTileSize(), gp.getTileSize());
 			}
 			
-			g2.fillRect(x, y, gp.getTileSize(), gp.getTileSize());
+			g2.setStroke(new BasicStroke(1));
 			
 			if(checkTileForPiece(col, row) != null) {
 				g2.drawImage(checkTileForPiece(col, row).getPieceImage(), x, y, gp.getTileSize(), gp.getTileSize(), null);
@@ -128,4 +135,23 @@ public class Board {
 		return null;
 	}
 	
+	public void movePiece(int newCol, int newRow) {
+		int currentPieceCol = gp.getSelectedPiece().getCurrentPos().x;
+		int currentPieceRow = gp.getSelectedPiece().getCurrentPos().y;
+		
+		if(checkTileForPiece(newCol, newRow) == null) {
+			currentBoard[newCol][newRow] = currentBoard[currentPieceCol][currentPieceRow];
+			gp.getSelectedPiece().setCurrentPos(newCol, newRow);
+			currentBoard[currentPieceCol][currentPieceRow] = null;
+		}
+		else {
+			if(currentBoard[newCol][newRow].getColour() != gp.getSelectedPiece().getColour()) {
+				currentBoard[newCol][newRow] = currentBoard[currentPieceCol][currentPieceRow];
+				gp.getSelectedPiece().setCurrentPos(newCol, newRow);
+				currentBoard[currentPieceCol][currentPieceRow] = null;
+			}
+		}
+	
+		gp.setSelectedPiece(null);
+	}
 }
