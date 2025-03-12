@@ -15,6 +15,7 @@ public class King extends Piece {
 	public King(GamePanel p_gp, Point p_startingPos, String p_colour) {
 		super(p_gp);
 		
+		this.title = "king";
 		this.currentPos = p_startingPos;
 		this.colour = p_colour;
 		

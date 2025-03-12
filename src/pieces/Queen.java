@@ -9,6 +9,7 @@ public class Queen extends Piece {
 	public Queen(GamePanel p_gp, Point p_startingPos, String p_colour) {
 		super(p_gp);
 		
+		this.title = "queen";
 		this.currentPos = p_startingPos;
 		this.colour = p_colour;
 		

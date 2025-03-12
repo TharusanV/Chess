@@ -13,7 +13,7 @@ import main.GamePanel;
 public class Piece {
 
 	GamePanel gp;
-	int id;
+	String title;
 	Point currentPos;
 	String colour;
 	BufferedImage pieceImage;
@@ -37,15 +37,13 @@ public class Piece {
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public int getId() {
-		return id;
+	public String getTitle() {
+		return title;
 	}
 
-
-	public void setId(int id) {
-		this.id = id;
+	public void setTitle(String title) {
+		this.title = title;
 	}
-
 
 	public Point getCurrentPos() {
 		return currentPos;

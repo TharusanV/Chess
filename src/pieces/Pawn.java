@@ -11,6 +11,7 @@ public class Pawn extends Piece {
 	public Pawn(GamePanel p_gp, Point p_startingPos, String p_colour) {
 		super(p_gp);
 		
+		this.title = "pawn";
 		this.currentPos = p_startingPos;
 		this.colour = p_colour;
 		

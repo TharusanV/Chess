@@ -9,6 +9,7 @@ public class Bishop extends Piece {
 	public Bishop(GamePanel p_gp, Point p_startingPos, String p_colour) {
 		super(p_gp);
 		
+		this.title = "bishop";
 		this.currentPos = p_startingPos;
 		this.colour = p_colour;
 		

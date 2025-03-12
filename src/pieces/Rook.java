@@ -9,6 +9,7 @@ public class Rook extends Piece {
 	public Rook(GamePanel p_gp, Point p_startingPos, String p_colour) {
 		super(p_gp);
 		
+		this.title = "rook";
 		this.currentPos = p_startingPos;
 		this.colour = p_colour;
 		

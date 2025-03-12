@@ -154,4 +154,8 @@ public class Board {
 	
 		gp.setSelectedPiece(null);
 	}
+	
+	public void drawPawnUpgradeOptions() {
+		
+	}
 }
