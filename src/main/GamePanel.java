@@ -4,9 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Stack;
 
 import javax.swing.JPanel;
 
+import gameLogic.Move;
 import pieces.Piece;
 import ui.Board;
 import utility.KeyHandler;
@@ -27,9 +29,13 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	
 	private Board board = new Board(this);
+	private boolean isWhiteTurn = true;
+	
+	private Stack<Move> moveHistory = new Stack<>();
 	
 	private boolean playerIsWhite = true;
 	private Piece selectedPiece = null;
+	
 	
 	Thread gameThread;
 	
@@ -159,6 +165,22 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public void setPlayerIsWhite(boolean playerIsWhite) {
 		this.playerIsWhite = playerIsWhite;
+	}
+
+	public Stack<Move> getMoveHistory() {
+		return moveHistory;
+	}
+
+	public void setMoveHistory(Stack<Move> moveHistory) {
+		this.moveHistory = moveHistory;
+	}
+
+	public boolean isWhiteTurn() {
+		return isWhiteTurn;
+	}
+
+	public void setWhiteTurn(boolean isWhiteTurn) {
+		this.isWhiteTurn = isWhiteTurn;
 	}
 	
 	

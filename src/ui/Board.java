@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
+import gameLogic.Move;
 import main.GamePanel;
 import pieces.Bishop;
 import pieces.King;
@@ -24,6 +25,9 @@ public class Board {
 	
 	Color myWhite = new Color(240, 217, 181);
 	Color myBrown = new Color(181, 136, 99);
+	
+	
+	
 	
 	public Board(GamePanel p_gp) {
 		this.gp = p_gp;
@@ -135,27 +139,38 @@ public class Board {
 		return null;
 	}
 	
-	public void movePiece(int newCol, int newRow) {
-		int currentPieceCol = gp.getSelectedPiece().getCurrentPos().x;
-		int currentPieceRow = gp.getSelectedPiece().getCurrentPos().y;
+	public void movePiece(int startCol, int startRow, int newCol, int newRow) {		
+		Piece movingPiece = checkTileForPiece(startCol, startRow);
+        Piece capturedPiece = checkTileForPiece(newCol, newRow);
 		
-		if(checkTileForPiece(newCol, newRow) == null) {
-			currentBoard[newCol][newRow] = currentBoard[currentPieceCol][currentPieceRow];
-			gp.getSelectedPiece().setCurrentPos(newCol, newRow);
-			currentBoard[currentPieceCol][currentPieceRow] = null;
-		}
-		else {
-			if(currentBoard[newCol][newRow].getColour() != gp.getSelectedPiece().getColour()) {
-				currentBoard[newCol][newRow] = currentBoard[currentPieceCol][currentPieceRow];
-				gp.getSelectedPiece().setCurrentPos(newCol, newRow);
-				currentBoard[currentPieceCol][currentPieceRow] = null;
-			}
-		}
-	
-		gp.setSelectedPiece(null);
+        if (capturedPiece != null && capturedPiece.getColour() == movingPiece.getColour()) {
+            return;
+        }
+        
+        Move move = new Move(startCol, startRow, newCol, newRow, movingPiece, capturedPiece);
+        gp.getMoveHistory().push(move);
+        currentBoard[newCol][newRow] =  movingPiece;
+        currentBoard[startCol][startRow] = null;
+        
+		gp.setWhiteTurn(!gp.isWhiteTurn());
 	}
 	
-	public void drawPawnUpgradeOptions() {
+	
+	
+	public void undoLastMove() {
+        if (gp.getMoveHistory().isEmpty()) return;
+
+        Move lastMove = gp.getMoveHistory().pop();
+        
+        currentBoard[lastMove.getOriginalX()][lastMove.getOriginalY()] =  lastMove.getMovingPiece();
+        currentBoard[lastMove.getNowX()][lastMove.getNowY()] =  lastMove.getCapturedPiece();  // Restore captured piece if any
+
+        gp.setWhiteTurn(!gp.isWhiteTurn()); // Reverse turn
+    }
+	
+	
+	public boolean checkForCheckmate(Piece[][] board) {
 		
+		return false;
 	}
 }

@@ -25,6 +25,7 @@ public class Knight extends Piece {
 		loadPieceIcon(p_colour + "_knight");
 	}
 	
+	
 	public void findPossibleMoves() {
 		allPossibleMovesList.clear();
 		
@@ -46,4 +47,15 @@ public class Knight extends Piece {
             }
         }
 	}
+	
+	
+	public boolean canKingCastle() {
+		return false;
+	}
+	
+	public boolean isKingInDanger() {
+		return false;
+	}
+	
+	
 }

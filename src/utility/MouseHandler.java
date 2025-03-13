@@ -22,23 +22,27 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
             int x = e.getX();
             int y = e.getY();
             
-            
             int col = (int) Math.floor(x / gamePanel.getTileSize());
             int row = (int) Math.floor(y / gamePanel.getTileSize());
             
-            if(gamePanel.getSelectedPiece() == null) {
-            	gamePanel.attemptChangeSelectedPiece(col, row);
+            if((gamePanel.isWhiteTurn() && gamePanel.isPlayerIsWhite()) || (!gamePanel.isWhiteTurn() && !gamePanel.isPlayerIsWhite())) {
+            	if(gamePanel.getSelectedPiece() == null) {
+                	gamePanel.attemptChangeSelectedPiece(col, row);
+                }
+                else {
+                	//Move Piece
+                	if(gamePanel.getSelectedPiece().getAllPossibleMovesList().contains(new Point(col, row))){
+                		gamePanel.getBoard().movePiece(gamePanel.getSelectedPiece().getCurrentPos().x, gamePanel.getSelectedPiece().getCurrentPos().y, col, row);
+                		gamePanel.setSelectedPiece(null);
+                	}
+                	else{ //Change Piece
+                		gamePanel.attemptChangeSelectedPiece(col, row);
+                	}
+                	
+                }
             }
-            else {
-            	//Move Piece
-            	if(gamePanel.getSelectedPiece().getAllPossibleMovesList().contains(new Point(col, row))){
-            		gamePanel.getBoard().movePiece(col, row);
-            	}
-            	else{ //Change Piece
-            		gamePanel.attemptChangeSelectedPiece(col, row);
-            	}
-            	
-            }
+            
+            
             
             //System.out.println(gamePanel.getSelectedPiece());
         }
