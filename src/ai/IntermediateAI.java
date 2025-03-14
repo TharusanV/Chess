@@ -21,7 +21,7 @@ public class IntermediateAI {
 		this.gp = p_gp;
 	}
 	
-	
+	/*
 	public int evaluateBoard(Piece[][] board, boolean isPlayingWhite) {
 		int score = 0;
 		
@@ -93,6 +93,7 @@ public class IntermediateAI {
 		return moves;
 	}
 	
+	
 	public int minimax(Piece[][] board, int depth, int alpha, int beta, boolean isMaximising) {
 	    if (depth == 0 || isGameOver(board)) {
 	        return evaluateBoard(board, true);
@@ -129,5 +130,6 @@ public class IntermediateAI {
 		
 		return 0;
 	}
+	*/
 	
 }

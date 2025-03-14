@@ -14,7 +14,8 @@ public class Piece {
 
 	GamePanel gp;
 	String title;
-	Point currentPos;
+	int currentRow;
+	int currentCol;
 	String colour;
 	BufferedImage pieceImage;
 	List<Point> allPossibleMovesList = new ArrayList<>();
@@ -45,14 +46,17 @@ public class Piece {
 		this.title = title;
 	}
 
-	public Point getCurrentPos() {
-		return currentPos;
+	public int getCurrentPosRow() {
+		return currentRow;
 	}
 
+	public int getCurrentPosCol() {
+		return currentCol;
+	}
 
-	public void setCurrentPos(int newCol, int newRow) {
-		this.currentPos.x = newCol;
-		this.currentPos.y = newRow;
+	public void setCurrentRowAndPos(int newRow, int newCol) {
+		this.currentRow = newRow;
+		this.currentCol = newCol;
 	}
 
 
@@ -84,6 +88,12 @@ public class Piece {
 	}
 	
 	
-	
+	public boolean isWhite() {
+		if(colour == "white") {
+			return true;
+		}
+		
+		return false;
+	}
 	
 }

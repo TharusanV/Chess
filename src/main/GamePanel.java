@@ -101,13 +101,15 @@ public class GamePanel extends JPanel implements Runnable {
 
 	
 	
-	public void attemptChangeSelectedPiece(int col, int row) {
-		if(board.checkTileForPiece(col, row) != null) {
-        	Piece potentialPiece = board.checkTileForPiece(col, row);
+	public void attemptChangeSelectedPiece(int row, int col) {
+		if(board.checkTileForPiece(row, col) != null) {
+			
+        	Piece potentialPiece = board.checkTileForPiece(row, col);
+        	
         	if(potentialPiece.getColour() == "white" && isPlayerIsWhite()) {
         		setSelectedPiece(potentialPiece);
         	}
-        	else if(potentialPiece.getColour() == "black" && isPlayerIsWhite() == false) {
+        	else if(potentialPiece.getColour() == "black" && !isPlayerIsWhite()) {
         		setSelectedPiece(potentialPiece);
         	}
         }

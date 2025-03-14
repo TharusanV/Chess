@@ -4,50 +4,50 @@ import pieces.Piece;
 
 public class Move {
 	
-    int originalX, originalY; 
-    int nowX, nowY;
+    int originalCol, originalRow; 
+    int nowCol, nowRow;
     Piece movingPiece; 
     Piece capturedPiece; // The piece that was captured (if any)
 
-    public Move(int p_originalX, int p_originalY, int p_nowX, int p_nowY, Piece p_movingPiece, Piece p_capturedPiece) {
-        this.originalX = p_originalX;
-        this.originalY = p_originalY;
-        this.nowX = p_nowX;
-        this.nowY = p_nowY;
+    public Move(int p_originalCol, int p_originalRow, int p_nowCol, int p_nowRow, Piece p_movingPiece, Piece p_capturedPiece) {
+        this.originalCol = p_originalCol;
+        this.originalRow = p_originalRow;
+        this.nowCol = p_nowCol;
+        this.nowRow = p_nowRow;
         this.movingPiece = p_movingPiece;
         this.capturedPiece = p_capturedPiece; // Can be null if no capture
     }
 
-	public int getOriginalX() {
-		return originalX;
+	public int getOriginalCol() {
+		return originalCol;
 	}
 
-	public void setOriginalX(int originalX) {
-		this.originalX = originalX;
+	public void setOriginalCol(int originalCol) {
+		this.originalCol = originalCol;
 	}
 
-	public int getOriginalY() {
-		return originalY;
+	public int getOriginalRow() {
+		return originalRow;
 	}
 
-	public void setOriginalY(int originalY) {
-		this.originalY = originalY;
+	public void setOriginalRow(int originalRow) {
+		this.originalRow = originalRow;
 	}
 
-	public int getNowX() {
-		return nowX;
+	public int getNowCol() {
+		return nowCol;
 	}
 
-	public void setNowX(int nowX) {
-		this.nowX = nowX;
+	public void setNowCol(int nowCol) {
+		this.nowCol = nowCol;
 	}
 
-	public int getNowY() {
-		return nowY;
+	public int getNowRow() {
+		return nowRow;
 	}
 
-	public void setNowY(int nowY) {
-		this.nowY = nowY;
+	public void setNowRow(int nowRow) {
+		this.nowRow = nowRow;
 	}
 
 	public Piece getMovingPiece() {

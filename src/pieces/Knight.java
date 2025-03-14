@@ -15,11 +15,12 @@ public class Knight extends Piece {
 	
 	};
 	
-	public Knight(GamePanel p_gp, Point p_startingPos, String p_colour) {
+	public Knight(GamePanel p_gp, int p_currentRow, int p_currentCol, String p_colour) {
 		super(p_gp);
 		
 		this.title = "knight";
-		this.currentPos = p_startingPos;
+		this.currentRow =  p_currentRow;
+		this.currentCol = p_currentCol;
 		this.colour = p_colour;
 		
 		loadPieceIcon(p_colour + "_knight");
@@ -30,15 +31,15 @@ public class Knight extends Piece {
 		allPossibleMovesList.clear();
 		
 		for (int[] pair : possibilities) {
-			int col = currentPos.x + pair[0];
-            int row = currentPos.y + pair[1];
+			int col = currentCol + pair[0];
+            int row = currentRow + pair[1];
             
 
             // Check if the row and column indexes are valid
             if (row >= 0 && row < gp.getMaxScreenRow() && col >= 0 && col < gp.getMaxScreenCol()) {
-            	if(gp.getBoard().checkTileForPiece(col, row) != null){
-            		if(gp.getBoard().checkTileForPiece(col, row).getColour() != colour){
-                    	allPossibleMovesList.add(new Point(col, row));
+            	if(gp.getBoard().checkTileForPiece(row, col) != null){
+            		if(gp.getBoard().checkTileForPiece(row, col).getColour() != colour){
+            			allPossibleMovesList.add(new Point(col, row));
                     }
                 }
             	else{
@@ -49,13 +50,7 @@ public class Knight extends Piece {
 	}
 	
 	
-	public boolean canKingCastle() {
-		return false;
-	}
 	
-	public boolean isKingInDanger() {
-		return false;
-	}
 	
 	
 }
