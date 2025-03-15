@@ -1,15 +1,18 @@
 package pieces;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
+import gameLogic.ChessLogic;
 import main.GamePanel;
 
 public class Pawn extends Piece {
 
 	int startingPosRow;
 	
-	public Pawn(GamePanel p_gp, int p_currentRow, int p_currentCol, String p_colour) {
-		super(p_gp);
+	public Pawn(Piece[][] p_currentBoard, int p_currentRow, int p_currentCol, String p_colour) {
+		this.currentBoard =  p_currentBoard;
 		
 		this.title = "pawn";
 		this.currentRow =  p_currentRow;
@@ -20,20 +23,21 @@ public class Pawn extends Piece {
 		
 		loadPieceIcon(p_colour + "_pawn");
 	}
-
-	public void findPossibleMoves() {
-		allPossibleMovesList.clear();
+	
+	public List<Point> findLegalMoves() {
+		List<Point> legalMoves = new ArrayList<>();
+		
 		int moveDirection = colour == "white" ? -1 : 1;
 		
 		//Straight
 		if((currentRow + moveDirection >= 0) && (currentRow + moveDirection < 8)) {
-			if(gp.getBoard().checkTileForPiece(currentRow + moveDirection, currentCol) == null) {
-				allPossibleMovesList.add(new Point(currentCol, currentRow + moveDirection));
+			if(ChessLogic.checkTileForPiece(currentRow + moveDirection, currentCol, currentBoard) == null) {
+				legalMoves.add(new Point(currentCol, currentRow + moveDirection));
 				
 				//Check if they can move two points forward
 				if(currentRow == startingPosRow) {
-					if(gp.getBoard().checkTileForPiece(currentRow + moveDirection * 2, currentCol) == null) {
-						allPossibleMovesList.add(new Point(currentCol, currentRow + moveDirection * 2));
+					if(ChessLogic.checkTileForPiece(currentRow + moveDirection * 2, currentCol, currentBoard) == null) {
+						legalMoves.add(new Point(currentCol, currentRow + moveDirection * 2));
 					}
 				}
 			}
@@ -41,9 +45,9 @@ public class Pawn extends Piece {
 		
 		//Possible diagonal (left White / right Black (flipped left))
 		if((currentCol - moveDirection >= 0) && (currentCol - moveDirection < 8) && (currentRow + moveDirection >= 0) && (currentRow + moveDirection < 8)) {
-			if(gp.getBoard().checkTileForPiece(currentRow + moveDirection, currentCol - moveDirection) != null) {
-				if(gp.getBoard().checkTileForPiece(currentRow + moveDirection, currentCol - moveDirection).getColour() != colour) {
-					allPossibleMovesList.add(new Point(currentCol - moveDirection, currentRow + moveDirection));
+			if(ChessLogic.checkTileForPiece(currentRow + moveDirection, currentCol - moveDirection, currentBoard) != null) {
+				if(ChessLogic.checkTileForPiece(currentRow + moveDirection, currentCol - moveDirection, currentBoard).getColour() != colour) {
+					legalMoves.add(new Point(currentCol - moveDirection, currentRow + moveDirection));
 				}
 			}
 		}
@@ -51,12 +55,14 @@ public class Pawn extends Piece {
 		
 		//Possible diagonal (right White / left Black (flipped right))
 		if((currentCol + moveDirection >= 0) && (currentCol + moveDirection < 8) && (currentRow + moveDirection >= 0) && (currentRow + moveDirection < 8)) {
-			if(gp.getBoard().checkTileForPiece(currentRow + moveDirection, currentCol + moveDirection) != null) {
-				if(gp.getBoard().checkTileForPiece(currentRow + moveDirection, currentCol + moveDirection).getColour() != colour) {
-					allPossibleMovesList.add(new Point(currentCol + moveDirection, currentRow + moveDirection));
+			if(ChessLogic.checkTileForPiece(currentRow + moveDirection, currentCol + moveDirection, currentBoard) != null) {
+				if(ChessLogic.checkTileForPiece(currentRow + moveDirection, currentCol + moveDirection, currentBoard).getColour() != colour) {
+					legalMoves.add(new Point(currentCol + moveDirection, currentRow + moveDirection));
 				}
 			}
 		}
-	}
+        
+        return legalMoves;
+	}	
 	
 }

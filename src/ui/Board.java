@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import gameLogic.ChessLogic;
 import gameLogic.Move;
 import main.GamePanel;
 import pieces.Bishop;
@@ -25,7 +26,7 @@ public class Board {
 	Graphics2D g2;
 	
 	private Color[][] defaultTilesColours;
-	private Piece[][] currentBoard;
+	public Piece[][] currentBoard;
 	
 	Color myWhite = new Color(240, 217, 181);
 	Color myBrown = new Color(181, 136, 99);
@@ -49,41 +50,40 @@ public class Board {
 	        }
 	    }
 		
-		
 		//Pawns
 		for(int col = 0; col < 8; col++) {
-			currentBoard[1][col] = new Pawn(gp, 1, col, "black");
-			currentBoard[6][col] = new Pawn(gp, 6, col, "white");	
+			currentBoard[1][col] = new Pawn( currentBoard, 1, col, "black");
+			currentBoard[6][col] = new Pawn( currentBoard, 6, col, "white");	
 		}
 		
 		int rowForWhite = 7;
 		int rowForBlack = 0;
 		
 		// Rook
-		currentBoard[rowForBlack][0] = new Rook(gp, rowForBlack, 0, "black");
-		currentBoard[rowForBlack][7] = new Rook(gp, rowForBlack, 7, "black");
-		currentBoard[rowForWhite][0] = new Rook(gp, rowForWhite, 0, "white");
-		currentBoard[rowForWhite][7] = new Rook(gp, rowForWhite, 7, "white");
+		currentBoard[rowForBlack][0] = new Rook( currentBoard, rowForBlack, 0, "black");
+		currentBoard[rowForBlack][7] = new Rook( currentBoard, rowForBlack, 7, "black");
+		currentBoard[rowForWhite][0] = new Rook( currentBoard, rowForWhite, 0, "white");
+		currentBoard[rowForWhite][7] = new Rook( currentBoard, rowForWhite, 7, "white");
 
 		// Knight
-		currentBoard[rowForBlack][1] = new Knight(gp, rowForBlack, 1, "black");
-		currentBoard[rowForBlack][6] = new Knight(gp, rowForBlack, 6, "black");
-		currentBoard[rowForWhite][1] = new Knight(gp, rowForWhite, 1, "white");
-		currentBoard[rowForWhite][6] = new Knight(gp, rowForWhite, 6, "white");
+		currentBoard[rowForBlack][1] = new Knight( currentBoard, rowForBlack, 1, "black");
+		currentBoard[rowForBlack][6] = new Knight( currentBoard, rowForBlack, 6, "black");
+		currentBoard[rowForWhite][1] = new Knight( currentBoard, rowForWhite, 1, "white");
+		currentBoard[rowForWhite][6] = new Knight( currentBoard, rowForWhite, 6, "white");
 
 		// Bishop
-		currentBoard[rowForBlack][2] = new Bishop(gp, rowForBlack, 2, "black");
-		currentBoard[rowForBlack][5] = new Bishop(gp, rowForBlack, 5, "black");
-		currentBoard[rowForWhite][2] = new Bishop(gp, rowForWhite, 2, "white");
-		currentBoard[rowForWhite][5] = new Bishop(gp, rowForWhite, 5, "white");
+		currentBoard[rowForBlack][2] = new Bishop( currentBoard, rowForBlack, 2, "black");
+		currentBoard[rowForBlack][5] = new Bishop( currentBoard, rowForBlack, 5, "black");
+		currentBoard[rowForWhite][2] = new Bishop( currentBoard, rowForWhite, 2, "white");
+		currentBoard[rowForWhite][5] = new Bishop( currentBoard, rowForWhite, 5, "white");
 
 		// King
-		currentBoard[rowForBlack][3] = new King(gp, rowForBlack, 3, "black");
-		currentBoard[rowForWhite][3] = new King(gp, rowForWhite, 3, "white");
+		currentBoard[rowForBlack][3] = new King( currentBoard, rowForBlack, 3, "black");
+		currentBoard[rowForWhite][3] = new King( currentBoard, rowForWhite, 3, "white");
 
 		// Queen
-		currentBoard[rowForBlack][4] = new Queen(gp, rowForBlack, 4, "black");
-		currentBoard[rowForWhite][4] = new Queen(gp, rowForWhite, 4, "white");
+		currentBoard[rowForBlack][4] = new Queen( currentBoard, rowForBlack, 4, "black");
+		currentBoard[rowForWhite][4] = new Queen( currentBoard, rowForWhite, 4, "white");
 	}
 
 	public void draw(Graphics2D p_g2) {
@@ -94,7 +94,7 @@ public class Board {
 	        	int x = col * gp.getTileSize();
 				int y = row * gp.getTileSize();
 	        	
-				if(gp.getSelectedPiece() != null && gp.getSelectedPiece().getAllPossibleMovesList().contains(new Point(col, row))) {
+				if(gp.getSelectedPiece() != null && gp.getSelectedPiece().findLegalMoves().contains(new Point(col, row))) {
 					g2.setColor(Color.GRAY);
 					g2.fillRect(x, y, gp.getTileSize() - 3, gp.getTileSize() - 3);
 					
@@ -109,33 +109,26 @@ public class Board {
 				
 				g2.setStroke(new BasicStroke(1));
 				
-				if(checkTileForPiece(row, col) != null) {
-					g2.drawImage(checkTileForPiece(row, col).getPieceImage(), x, y, gp.getTileSize(), gp.getTileSize(), null);
+				if(ChessLogic.checkTileForPiece(row, col, currentBoard) != null) {
+					g2.drawImage(ChessLogic.checkTileForPiece(row, col, currentBoard).getPieceImage(), x, y, gp.getTileSize(), gp.getTileSize(), null);
 				}
 	        }
 	    }
-		
 	}
 	
 	public void update() {
 		if(gp.getSelectedPiece() != null) {
-			gp.getSelectedPiece().findPossibleMoves();
+			gp.getSelectedPiece().findLegalMoves();
 		}
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////
 	
-	public Piece checkTileForPiece(int row, int col) {
-		if(currentBoard[row][col] != null) {
-			return currentBoard[row][col];
-		}
-		
-		return null;
-	}
+
 	
 	public void movePiece(int startCol, int startRow, int newCol, int newRow) {		
-		Piece movingPiece = checkTileForPiece(startRow, startCol);
-        Piece capturedPiece = checkTileForPiece(newRow, newCol);
+		Piece movingPiece = ChessLogic.checkTileForPiece(startRow, startCol, currentBoard);
+        Piece capturedPiece = ChessLogic.checkTileForPiece(newRow, newCol, currentBoard);
 		
         if (capturedPiece != null && capturedPiece.getColour() == movingPiece.getColour()) {
             return;

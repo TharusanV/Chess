@@ -1,7 +1,10 @@
 package pieces;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
+import gameLogic.ChessLogic;
 import main.GamePanel;
 
 public class Knight extends Piece {
@@ -15,8 +18,8 @@ public class Knight extends Piece {
 	
 	};
 	
-	public Knight(GamePanel p_gp, int p_currentRow, int p_currentCol, String p_colour) {
-		super(p_gp);
+	public Knight(Piece[][] p_currentBoard, int p_currentRow, int p_currentCol, String p_colour) {
+		this.currentBoard =  p_currentBoard;
 		
 		this.title = "knight";
 		this.currentRow =  p_currentRow;
@@ -26,30 +29,30 @@ public class Knight extends Piece {
 		loadPieceIcon(p_colour + "_knight");
 	}
 	
-	
-	public void findPossibleMoves() {
-		allPossibleMovesList.clear();
+	public List<Point> findLegalMoves() {
+		List<Point> legalMoves = new ArrayList<>();
 		
 		for (int[] pair : possibilities) {
 			int col = currentCol + pair[0];
-            int row = currentRow + pair[1];
-            
-
-            // Check if the row and column indexes are valid
-            if (row >= 0 && row < gp.getMaxScreenRow() && col >= 0 && col < gp.getMaxScreenCol()) {
-            	if(gp.getBoard().checkTileForPiece(row, col) != null){
-            		if(gp.getBoard().checkTileForPiece(row, col).getColour() != colour){
-            			allPossibleMovesList.add(new Point(col, row));
-                    }
-                }
-            	else{
-            		allPossibleMovesList.add(new Point(col, row));
-                }
+			int row = currentRow + pair[1];
+			
+            if (row >= 0 && row < 8 && col >= 0 && col < 8) {
+            	Piece tilePiece = ChessLogic.checkTileForPiece(row, col, currentBoard);
+            	
+            	if(tilePiece == null) {
+            		legalMoves.add(new Point(col, row));
+            	}
+            	else {
+            		if(tilePiece.getColour() != colour){
+            			legalMoves.add(new Point(col, row));
+            		}
+                }	
             }
-        }
-	}
-	
-	
+            
+		}
+        
+        return legalMoves;
+	}	
 	
 	
 	

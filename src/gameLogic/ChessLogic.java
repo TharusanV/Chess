@@ -16,59 +16,16 @@ import pieces.Rook;
 
 
 public class ChessLogic {
-
-	private GamePanel gp;
 	
-	public ChessLogic(GamePanel gp) {
-		this.gp = gp;
+	public static Piece checkTileForPiece(int row, int col, Piece[][] board) {
+		if(board[row][col] != null) {
+			return board[row][col];
+		}
+		
+		return null;
 	}
 	
-	public List<Piece> getMoveablePieces(Piece[][] board, boolean playerIsWhite) {
-		List<Piece> allPiecesList = new ArrayList<>();
-		
-		for (int row = 0; row < board.length; row++) {
-	        for (int col = 0; col < board[row].length; col++) {
-	            Piece piece = board[row][col];
-	            if (piece != null && piece.isWhite() == playerIsWhite && piece.getAllPossibleMovesList().size() > 0) {
-	            	allPiecesList.add(piece);
-	            }
-	        }
-	    }
-		
-		return allPiecesList;
-	}
-	
-	public List<Piece> getAttackingPiecesOnKing(Piece[][] board, boolean playerIsWhite, Piece oppositeKing) {
-		List<Piece> allPiecesList = new ArrayList<>();
-		
-		for (int row = 0; row < board.length; row++) {
-	        for (int col = 0; col < board[row].length; col++) {
-	            Piece piece = board[row][col];
-	            if (piece != null && piece.isWhite() == playerIsWhite && piece.getAllPossibleMovesList().contains(new Point(oppositeKing.getCurrentPosCol(), oppositeKing.getCurrentPosRow()))) {
-	            	allPiecesList.add(piece);
-	            }
-	        }
-	    }
-		
-		return allPiecesList;
-	}
-	
-	public Set<Point> findMoveableTiles(Piece[][] board, boolean playerIsWhite) {
-		Set<Point> allAttackableTilesList = new HashSet<>();
-		
-		for (int row = 0; row < board.length; row++) {
-	        for (int col = 0; col < board[row].length; col++) {
-	            Piece piece = board[row][col];
-	            if (piece != null && piece.isWhite() == playerIsWhite) {
-	            	allAttackableTilesList.addAll(piece.getAllPossibleMovesList());
-	            }
-	        }
-	    }
-		
-		return allAttackableTilesList;
-	}
-	
-	public List<Point> getPathBetween(Piece attacked, Piece attacker) {
+	public static List<Point> getPathBetween(Piece attacked, Piece attacker) {
 	    List<Point> path = new ArrayList<>();
 	    
 	    int kingRow = attacked.getCurrentPosRow();
@@ -90,15 +47,56 @@ public class ChessLogic {
 
 	    return path;
 	}
+	
+	
+	public static List<Piece> findMoveablePieces(Piece[][] board, boolean playerIsWhite) {
+		List<Piece> allPiecesList = new ArrayList<>();
+		
+		for (int row = 0; row < board.length; row++) {
+	        for (int col = 0; col < board[row].length; col++) {
+	            Piece pieceTile = board[row][col];
+	            if (pieceTile == null) { continue; }
+	            
+	            if (pieceTile.isWhite() == playerIsWhite && pieceTile.findLegalMoves().size() > 0) {
+	            	allPiecesList.add(pieceTile);
+	            }
+	        }
+	    }
+		
+		return allPiecesList;
+	}
+	
+	public static List<Piece> findAttackingPiecesOnKing(Piece[][] board, Piece king) {
+	    List<Piece> allPiecesList = new ArrayList<>();
 
-	
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	public Piece findKing(Piece[][] board, boolean currentPlayerIsWhite) {
+	    Point kingPoint = new Point(king.getCurrentPosCol(),king.getCurrentPosRow());
+	    
 	    for (int row = 0; row < board.length; row++) {
 	        for (int col = 0; col < board[row].length; col++) {
 	            Piece piece = board[row][col];
-	            if (piece != null && piece instanceof King && piece.isWhite() == currentPlayerIsWhite) {
+	            if (piece == null) { continue;}
+	            
+	            List<Point> movePos = piece.findLegalMoves();         
+	            
+	            if (piece.isWhite() != king.isWhite() && movePos.contains(kingPoint)) {
+	            	allPiecesList.add(piece);
+	            }
+	            
+	        }
+	    }
+
+	    return allPiecesList;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public static Piece findKing(Piece[][] board, boolean currentPlayerIsWhite) {
+	    for (int row = 0; row < board.length; row++) {
+	        for (int col = 0; col < board[row].length; col++) {
+	            Piece piece = board[row][col];
+	            if (piece == null) { continue;}
+	            
+	            if (piece instanceof King && piece.isWhite() == currentPlayerIsWhite) {
 	                return piece;
 	            }
 	        }
@@ -108,63 +106,51 @@ public class ChessLogic {
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/*
-	public boolean isCheckAfterMove(Piece[][] board, Move move) {
-		Piece[][] tempBoard = board;
-		
-		tempBoard[move.nowRow][move.nowCol] = move.movingPiece;
-		tempBoard[move.originalRow][move.originalCol] = null;
-	    
-	    if isInCheck(tempBoard) {
-	    	return true;
-	    }
-	        
-	    return false;
-	}
-	*/
-	
-	
-	public boolean isKingInDanger(Piece[][] board, boolean currentPlayerIsWhite) {
+	public static boolean isKingInDanger(Piece[][] board, boolean currentPlayerIsWhite) {
 		//Find the King
 		Piece king = findKing(board, currentPlayerIsWhite);
 		if(king == null) {return true;}
 		
+		List<Piece> attackers = findAttackingPiecesOnKing(board, king);
+		
+		//System.out.println(attackers.size());
 		
 		//Check for Attacks from opponent on King
-		if(getAttackingPiecesOnKing(board, !currentPlayerIsWhite ,king).size() > 0) {
+		if(attackers.size() > 0) {
 			return true;
 		}
 		
 		return false;
 	}
 	
-	public boolean canKingEscape(Piece[][] board, Piece king, boolean currentPlayerIsWhite) {
-		List<Piece> attackers = getAttackingPiecesOnKing(board, !currentPlayerIsWhite, king);
+	public static boolean canKingEscape(Piece[][] board, Piece king, boolean currentPlayerIsWhite) {
+		List<Piece> attackers = findAttackingPiecesOnKing(board, king);
 		
-		List<Point> kingMoves = king.getAllPossibleMovesList();
+		List<Point> kingMoves = king.findLegalMoves();
+		
+		//System.out.println(kingMoves.size());
 		
 		for (int i = kingMoves.size() - 1; i >= 0; i--) {
 		    Point potentialKingMove = kingMoves.get(i);
 		    
+		    //System.out.println(potentialKingMove);
+		    
 		    for (Piece attacker : attackers) {
-		    	if(attacker.getAllPossibleMovesList().contains(new Point(potentialKingMove.x, potentialKingMove.y))) {
+		    	if(attacker.findLegalMoves().contains(new Point(potentialKingMove.x, potentialKingMove.y))) {
 		    		kingMoves.remove(i);
 		    	}
 		    }
 		}
 		
-		king.setAllPossibleMoves(kingMoves);
-		
 		if(kingMoves.size() > 0) {
 			return true;
 		}
 		
-	
 		return false;
 	}
 	
-	public boolean canBlockOrCaptureAttacker(Piece[][] board, Piece king, boolean currentPlayerIsWhite) {
-		List<Piece> attackers = getAttackingPiecesOnKing(board, !currentPlayerIsWhite ,king);
+	public static boolean canBlockOrCaptureAttacker(Piece[][] board, Piece king, boolean currentPlayerIsWhite) {
+		List<Piece> attackers = findAttackingPiecesOnKing(board, king);
 		
 		if(attackers.size() > 1) {
 	        return false;  // If there are multiple attackers, only the king can move.
@@ -172,9 +158,13 @@ public class ChessLogic {
 		
 	    Piece attacker = attackers.get(0);  // Single attacker
 	    
-	    List<Piece> playersMoveablePieces = getMoveablePieces(board, currentPlayerIsWhite);
+	    List<Piece> playersMoveablePieces = findMoveablePieces(board, currentPlayerIsWhite);
+	    
 	    for(Piece playerPiece : playersMoveablePieces) {
-	    	if(playerPiece.getAllPossibleMovesList().contains(new Point(attacker.getCurrentPosCol(),attacker.getCurrentPosRow()))) {
+	    	if(playerPiece instanceof King) {continue;}
+	    	
+	    	if(playerPiece.findLegalMoves().contains(new Point(attacker.getCurrentPosCol(),attacker.getCurrentPosRow()))) {
+	    		
 	    		return true;  // A piece can capture the attacker
 	    	}
 	    	
@@ -182,7 +172,7 @@ public class ChessLogic {
 	            List<Point> attackPath = getPathBetween(king, attacker);  // Get all squares in attack path
 
 	            for (Point square : attackPath) {
-	                if (playerPiece.getAllPossibleMovesList().contains(square)) {
+	                if (playerPiece.findLegalMoves().contains(square)) {
 	                    return true;  // A piece can block the attack
 	                }
 	            }
@@ -193,19 +183,22 @@ public class ChessLogic {
 		
 	}
 	
-	public boolean checkForCheckmate(Piece[][] board, boolean currentPlayerIsWhite) {		
+	public static boolean checkForCheckmate(Piece[][] board, boolean currentPlayerIsWhite) {		
 		if(isKingInDanger(board, currentPlayerIsWhite) == false) {
+			System.out.println("a");
 			return false; // King is not in check, so it's not checkmate
 		}
 		
 		Piece king = findKing(board, currentPlayerIsWhite);
 		
 		if(canKingEscape(board, king, currentPlayerIsWhite)) {
+			System.out.println("b");
 			return false;  // King has a way out
 		}
         
 
 	    if(canBlockOrCaptureAttacker(board, king, currentPlayerIsWhite)) {
+	    	System.out.println("c");
 	        return false;  // A piece can block or capture the attacker
 	    }
 

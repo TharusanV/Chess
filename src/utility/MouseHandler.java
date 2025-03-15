@@ -25,13 +25,13 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
             int col = (int) Math.floor(x / gamePanel.getTileSize());
             int row = (int) Math.floor(y / gamePanel.getTileSize());
             
-            if((gamePanel.isWhiteTurn() && gamePanel.isPlayerIsWhite()) || (!gamePanel.isWhiteTurn() && !gamePanel.isPlayerIsWhite())) {
+            //if((gamePanel.isWhiteTurn() && gamePanel.isPlayerIsWhite()) || (!gamePanel.isWhiteTurn() && !gamePanel.isPlayerIsWhite())) {
             	if(gamePanel.getSelectedPiece() == null) {
                 	gamePanel.attemptChangeSelectedPiece(row, col);
                 }
                 else {
                 	//Move Piece
-                	if(gamePanel.getSelectedPiece().getAllPossibleMovesList().contains(new Point(col, row))){
+                	if(gamePanel.getSelectedPiece().findLegalMoves().contains(new Point(col, row))){
                 		gamePanel.getBoard().movePiece(gamePanel.getSelectedPiece().getCurrentPosCol(), 
                 									   gamePanel.getSelectedPiece().getCurrentPosRow(), 
                 									   col, 
@@ -44,7 +44,7 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
                 	}
                 	
                 }
-            }
+            //}
             
             
             

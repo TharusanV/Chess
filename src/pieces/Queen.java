@@ -1,13 +1,15 @@
 package pieces;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
 import main.GamePanel;
 
 public class Queen extends Piece {
 	
-	public Queen(GamePanel p_gp, int p_currentRow, int p_currentCol, String p_colour) {
-		super(p_gp);
+	public Queen(Piece[][] p_currentBoard, int p_currentRow, int p_currentCol, String p_colour) {
+		this.currentBoard =  p_currentBoard;
 		
 		this.title = "queen";
 		this.currentRow =  p_currentRow;
@@ -17,116 +19,20 @@ public class Queen extends Piece {
 		loadPieceIcon(p_colour + "_queen");
 	}
 	
-	public void findPossibleMoves() {
-		allPossibleMovesList.clear();
+	public List<Point> findLegalMoves() {
+		List<Point> legalMoves = new ArrayList<>();
+		int boardSize = 8;
 		
-        // check all possible moves in the top-left diagonal
-        for (int i = 1; currentRow-i >= 0 && currentCol-i >= 0; i++) {
-            if (gp.getBoard().checkTileForPiece(currentRow-i, currentCol-i)  == null) { // empty square
-                allPossibleMovesList.add(new Point(currentCol-i, currentRow-i));
-            } 
-            else if (gp.getBoard().checkTileForPiece(currentRow-i, currentCol-i).getColour() != colour) { // capture opponent's piece
-                allPossibleMovesList.add(new Point(currentCol-i, currentRow-i));
-                break; // can't move further in this direction
-            } 
-            else { // own piece blocking the way
-                break; // can't move further in this direction
-            }
-        }
-        // check all possible moves in the top-right diagonal
-        for (int i = 1; currentRow-i >= 0 && currentCol+i < 8; i++) {
-            if (gp.getBoard().checkTileForPiece(currentRow-i, currentCol+i) == null) { // empty square
-                allPossibleMovesList.add(new Point(currentCol+i, currentRow-i));
-            } 
-            else if (gp.getBoard().checkTileForPiece(currentRow-i, currentCol+i).getColour() != colour) { // capture opponent's piece
-                allPossibleMovesList.add(new Point(currentCol+i, currentRow-i));
-                break; // can't move further in this direction
-            } 
-            else { // own piece blocking the way
-                break; // can't move further in this direction
-            }
-        }
-        // check all possible moves in the bottom-left diagonal
-        for (int i = 1; currentRow+i < 8 && currentCol-i >= 0; i++) {
-            if (gp.getBoard().checkTileForPiece(currentRow+i, currentCol-i) == null) { // empty square
-                allPossibleMovesList.add(new Point(currentCol-i, currentRow+i));
-            } 
-            else if (gp.getBoard().checkTileForPiece(currentRow+i, currentCol-i).getColour() != colour) { // capture opponent's piece
-                allPossibleMovesList.add(new Point(currentCol-i, currentRow+i));
-                break; // can't move further in this direction
-            } 
-            else { // own piece blocking the way
-                break; // can't move further in this direction
-            }
-        }
-        // check all possible moves in the bottom-right diagonal
-        for (int i = 1; currentRow+i < 8 && currentCol+i < 8; i++) {
-            if (gp.getBoard().checkTileForPiece(currentRow+i, currentCol+i) == null) { // empty square
-                allPossibleMovesList.add(new Point(currentCol+i, currentRow+i));
-            } 
-            else if (gp.getBoard().checkTileForPiece(currentRow+i, currentCol+i).getColour() != colour) { // capture opponent's piece
-                allPossibleMovesList.add(new Point(currentCol+i, currentRow+i));
-                break; // can't move further in this direction
-            } 
-            else { // own piece blocking the way
-                break; // can't move further in this direction
-            }
-        }
-
-        // Check moves in the same row to the right
-        for(int col = currentCol + 1; col < 8; col++){
-            if (gp.getBoard().checkTileForPiece(currentRow, col) == null){
-                allPossibleMovesList.add(new Point(col, currentRow));
-            }
-            else if (gp.getBoard().checkTileForPiece(currentRow, col) != null && gp.getBoard().checkTileForPiece(currentRow, col).getColour() != colour){
-                allPossibleMovesList.add(new Point(col, currentRow));
-                break;
-            }
-            else{
-                break;
-            }
-        }
-
-        // Check moves in the same row to the left
-        for (int col = currentCol - 1; col >= 0; col--) {
-            if (gp.getBoard().checkTileForPiece(currentRow, col) == null){
-                allPossibleMovesList.add(new Point(col, currentRow));
-            }
-            else if (gp.getBoard().checkTileForPiece(currentRow, col) != null && gp.getBoard().checkTileForPiece(currentRow, col).getColour() != colour){
-                allPossibleMovesList.add(new Point(col, currentRow));
-                break;
-            }
-            else{
-                break;
-            }
-        }
-
-        // Check moves in the same column upwards
-        for (int row = currentRow - 1; row >= 0; row--) {
-            if (gp.getBoard().checkTileForPiece(row, currentCol) == null){
-                allPossibleMovesList.add(new Point(currentCol, row));
-            }
-            else if (gp.getBoard().checkTileForPiece(row, currentCol) != null && gp.getBoard().checkTileForPiece(row, currentCol).getColour() != colour){
-                allPossibleMovesList.add(new Point(currentCol, row));
-                break;
-            }
-            else{
-                break;
-            }
-        }
-
-        for (int row = currentRow + 1; row < 8; row++) {
-            if (gp.getBoard().checkTileForPiece(row, currentCol) == null){
-                allPossibleMovesList.add(new Point(currentCol, row));
-            }
-            else if (gp.getBoard().checkTileForPiece(row, currentCol) != null && gp.getBoard().checkTileForPiece(row, currentCol).getColour() != colour){
-                allPossibleMovesList.add(new Point(currentCol, row));
-                break;
-            }
-            else{
-                break;
-            }
-        }
-		
+		checkDirection(legalMoves, 1, 0, boardSize);  // Right (same row)
+	    checkDirection(legalMoves, -1, 0, boardSize); // Left (same row)
+	    checkDirection(legalMoves, 0, -1, boardSize); // Up (same column)
+	    checkDirection(legalMoves, 0, 1, boardSize);  // Down (same column)
+	    
+	    checkDirection(legalMoves, -1, -1, boardSize); // Check top-left diagonal
+	    checkDirection(legalMoves, -1, 1, boardSize); // Check top-right diagonal
+	    checkDirection(legalMoves, 1, -1, boardSize); // Check bottom-left diagonal
+	    checkDirection(legalMoves, 1, 1, boardSize); // Check bottom-right diagonal
+        
+        return legalMoves;
 	}
 }

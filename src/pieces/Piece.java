@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import gameLogic.ChessLogic;
 import main.GamePanel;
 
 public class Piece {
@@ -18,10 +19,10 @@ public class Piece {
 	int currentCol;
 	String colour;
 	BufferedImage pieceImage;
-	List<Point> allPossibleMovesList = new ArrayList<>();
+	Piece[][] currentBoard;
 	
-	public Piece(GamePanel p_gp) {
-		this.gp = p_gp;
+	public Piece() {
+	
 	}
 
 	
@@ -34,7 +35,9 @@ public class Piece {
 		}
 	}
 	
-	public void findPossibleMoves() {}
+	public List<Point> findLegalMoves() {
+		return null;
+	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -79,14 +82,6 @@ public class Piece {
 		this.pieceImage = pieceImage;
 	}
 
-	public List<Point> getAllPossibleMovesList() {
-		return allPossibleMovesList;
-	}
-
-	public void setAllPossibleMoves(List<Point> allPossibleMovesList) {
-		this.allPossibleMovesList = allPossibleMovesList;
-	}
-	
 	
 	public boolean isWhite() {
 		if(colour == "white") {
@@ -95,5 +90,34 @@ public class Piece {
 		
 		return false;
 	}
+	
+	
+	public void checkDirection(List<Point> legalMoves, int rowIncrement, int colIncrement, int boardSize) {
+	    int row = currentRow;
+	    int col = currentCol;
+
+	    while (true) {  // Keep moving in the given direction
+	        row += rowIncrement;
+	        col += colIncrement;
+
+	        // Stop if out of bounds
+	        if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) {
+	            break;
+	        }
+
+	        Piece tilePiece = ChessLogic.checkTileForPiece(row, col, currentBoard);
+	         
+	        if (tilePiece == null) {
+	            legalMoves.add(new Point(col, row));  // Empty square, keep moving
+	        } else {
+	            if (tilePiece.getColour() != colour) {
+	                legalMoves.add(new Point(col, row));  // Capture opponent piece
+	            }
+	            break; // Stop moving after hitting any piece
+	        }
+	    }
+	}
+
+
 	
 }

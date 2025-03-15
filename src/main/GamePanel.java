@@ -8,6 +8,7 @@ import java.util.Stack;
 
 import javax.swing.JPanel;
 
+import gameLogic.ChessLogic;
 import gameLogic.Move;
 import pieces.Piece;
 import ui.Board;
@@ -26,7 +27,6 @@ public class GamePanel extends JPanel implements Runnable {
 	private final int screenHeight = getTileSize() * maxScreenRow;
 	
 	private final int FPS = 60;
-	
 	
 	private Board board = new Board(this);
 	private boolean isWhiteTurn = true;
@@ -102,9 +102,9 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	
 	public void attemptChangeSelectedPiece(int row, int col) {
-		if(board.checkTileForPiece(row, col) != null) {
+		if(ChessLogic.checkTileForPiece(row, col, board.currentBoard) != null) {
 			
-        	Piece potentialPiece = board.checkTileForPiece(row, col);
+        	Piece potentialPiece = ChessLogic.checkTileForPiece(row, col, board.currentBoard);
         	
         	if(potentialPiece.getColour() == "white" && isPlayerIsWhite()) {
         		setSelectedPiece(potentialPiece);
@@ -184,7 +184,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public void setWhiteTurn(boolean isWhiteTurn) {
 		this.isWhiteTurn = isWhiteTurn;
 	}
-	
+
 	
 	
 }

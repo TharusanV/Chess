@@ -1,7 +1,10 @@
 package pieces;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
+import gameLogic.ChessLogic;
 import main.GamePanel;
 
 public class King extends Piece {
@@ -12,8 +15,8 @@ public class King extends Piece {
 	        {1, -1},  {1, 0},  {1, 1}
 	};
 	
-	public King(GamePanel p_gp, int p_currentRow, int p_currentCol, String p_colour) {
-		super(p_gp);
+	public King(Piece[][] p_currentBoard, int p_currentRow, int p_currentCol, String p_colour) {
+		this.currentBoard =  p_currentBoard;
 		
 		this.title = "king";
 		this.currentRow =  p_currentRow;
@@ -23,27 +26,29 @@ public class King extends Piece {
 		loadPieceIcon(p_colour + "_king");
 	}
 	
-	public void findPossibleMoves() {
-		allPossibleMovesList.clear();
+	public List<Point> findLegalMoves() {
+		List<Point> legalMoves = new ArrayList<>();
 		
 		for (int[] offset : offsets) {
 			int col = currentCol + offset[0];
 			int row = currentRow + offset[1];
 			
-            if (row >= 0 && row < gp.getMaxScreenRow() && col >= 0 && col < gp.getMaxScreenCol()) {
-            	if(gp.getBoard().checkTileForPiece(row, col) != null){
-                    if(gp.getBoard().checkTileForPiece(row, col).getColour() != colour){
-                        allPossibleMovesList.add(new Point(col, row));
-                    }
-                }
-                else{
-                	allPossibleMovesList.add(new Point(col, row));
-                }
+            if (row >= 0 && row < 8 && col >= 0 && col < 8) {
+            	Piece tilePiece = ChessLogic.checkTileForPiece(row, col, currentBoard);
+            	
+            	if(tilePiece == null) {
+            		legalMoves.add(new Point(col, row));
+            	}
+            	else {
+            		if(tilePiece.getColour() != colour){
+            			legalMoves.add(new Point(col, row));
+            		}
+                }	
             }
+            
 		}
-	}
-	
-	
-	
+        
+        return legalMoves;
+	}	
 	
 }
