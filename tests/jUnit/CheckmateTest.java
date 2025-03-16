@@ -88,31 +88,53 @@ class CheckmateTest {
 	        }
 	    }
 	    
-	    
-	    //System.out.println(board1[4][7]);
-	    //System.out.println(board1[7][4]);
-	    
-	    /*
-	    Piece queen = board1[4][7];
-	    
-	    System.out.println(queen.findLegalMoves().size());
-	    
-	    for (Point move : queen.findLegalMoves()) {
-            if (move != null) {
-            	if(move.y == 7) {
-            		System.out.println(ChessLogic.checkTileForPiece(move.y, move.x,board1));
-            	}
-            } 
-        }
-        */
-	    
-
 
 	    boolean result = ChessLogic.checkForCheckmate(board1, true);
 	    
 	    assertEquals(true, result);
 
 	}
+	
+	
+
+    @Test
+    void testKingInCheckButNotCheckmate() {
+        String[][] boardCheck = {
+                {"r", "n", "b", "q", "k", "b", "n", "r"},
+                {"p", "p", "p", ".", "p", "p", "p", "p"},
+                {".", ".", ".", ".", ".", ".", ".", "."},
+                {".", ".", ".", "p", ".", ".", ".", "."},
+                {".", ".", ".", ".", "P", "Q", ".", "."},
+                {".", ".", ".", ".", ".", ".", ".", "."},
+                {"P", "P", "P", "P", ".", "P", "P", "P"},
+                {"R", "N", "B", ".", "K", "B", "N", "R"}
+        };
+
+        Piece[][] board3 = new Piece[8][8];
+        
+        for (int row = 0; row < boardCheck.length; row++) {
+            for (int col = 0; col < boardCheck[row].length; col++) {
+                switch (boardCheck[row][col]) {
+                    case "r": board3[row][col] = new Rook(board3, row, col, "black"); break;
+                    case "R": board3[row][col] = new Rook(board3, row, col, "white"); break;
+                    case "n": board3[row][col] = new Knight(board3, row, col, "black"); break;
+                    case "N": board3[row][col] = new Knight(board3, row, col, "white"); break;
+                    case "b": board3[row][col] = new Bishop(board3, row, col, "black"); break;
+                    case "B": board3[row][col] = new Bishop(board3, row, col, "white"); break;
+                    case "q": board3[row][col] = new Queen(board3, row, col, "black"); break;
+                    case "Q": board3[row][col] = new Queen(board3, row, col, "white"); break;
+                    case "k": board3[row][col] = new King(board3, row, col, "black"); break;
+                    case "K": board3[row][col] = new King(board3, row, col, "white"); break;
+                    case "p": board3[row][col] = new Pawn(board3, row, col, "black"); break;
+                    case "P": board3[row][col] = new Pawn(board3, row, col, "white"); break;
+                    default: board3[row][col] = null; break;
+                }
+            }
+        }
+        
+        boolean result = ChessLogic.checkForCheckmate(board3, false);
+        assertEquals(false, result);
+    }
 
 
 }

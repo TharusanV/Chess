@@ -25,7 +25,7 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
             int col = (int) Math.floor(x / gamePanel.getTileSize());
             int row = (int) Math.floor(y / gamePanel.getTileSize());
             
-            //if((gamePanel.isWhiteTurn() && gamePanel.isPlayerIsWhite()) || (!gamePanel.isWhiteTurn() && !gamePanel.isPlayerIsWhite())) {
+            if((gamePanel.isWhiteTurn() && gamePanel.isPlayerIsWhite()) || (!gamePanel.isWhiteTurn() && !gamePanel.isPlayerIsWhite())) {
             	if(gamePanel.getSelectedPiece() == null) {
                 	gamePanel.attemptChangeSelectedPiece(row, col);
                 }
@@ -44,7 +44,7 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
                 	}
                 	
                 }
-            //}
+            }
             
             
             

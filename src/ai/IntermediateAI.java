@@ -5,7 +5,9 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
+import gameLogic.ChessLogic;
 import gameLogic.Move;
 import main.GamePanel;
 import pieces.Piece;
@@ -21,115 +23,109 @@ public class IntermediateAI {
 		this.gp = p_gp;
 	}
 	
-	/*
+	
 	public int evaluateBoard(Piece[][] board, boolean isPlayingWhite) {
-		int score = 0;
-		
-		for(int i = 0; i < board.length; i++) {
-			for(int j = 0; j < board[i].length; j++) {
-				Piece piece = board[i][j];
-				if(piece == null) {continue;}
-				
-				int value = 0;
-				switch(piece.getTitle()) {
-					case "pawn":
-						value = 100;
-							
-						//Center control (d4,e4,d5,e5) 2x2
-						if(i >= 3 && i <= 4 && j >= 3 && j <= 4) {value += 10;}
-						//Backrows of their opponent
-						else if((j == 0 & isPlayingWhite) || (j == 7 && !isPlayingWhite)) {value += 5;}
-						//Prior to backrow
-						else if((j == 1 & isPlayingWhite) || (j == 6 && !isPlayingWhite)) {value += 3;}
-						
-					case "knight":
-						value = 310;
-							
-						//Center control 4x4
-						if(i >= 2 && i <= 5 && j >= 2 && j <= 5) {value += 3;}
-						
-					case "bishop":
-						value = 330;
-						
-					case "rook":
-						value = 500;
-						
-					case "queen":
-						value = 900;
-						
-					case "king":
-						value = 5000;
-				}
-				
-				if (piece.getColour() == "white" && isPlayingWhite) {
-	                score += value;
-	            } else {
-	                score -= value;
+	    int score = 0;
+
+	    for (int i = 0; i < board.length; i++) {
+	        for (int j = 0; j < board[i].length; j++) {
+	            Piece piece = board[i][j];
+	            if (piece == null) { continue; }
+
+	            int value = 0;
+	            switch (piece.getTitle()) {
+	                case "pawn":
+	                    value = 100;
+	                    // Center control (d4, e4, d5, e5)
+	                    if (i >= 3 && i <= 4 && j >= 3 && j <= 4) { value += 10; }
+	                    // Back rows of their opponent
+	                    else if ((j == 0 && isPlayingWhite) || (j == 7 && !isPlayingWhite)) { value += 5; }
+	                    // Prior to back row
+	                    else if ((j == 1 && isPlayingWhite) || (j == 6 && !isPlayingWhite)) { value += 3; }
+	                    break;
+
+	                case "knight":
+	                    value = 310;
+	                    // Center control (4x4)
+	                    if (i >= 2 && i <= 5 && j >= 2 && j <= 5) { value += 3; }
+	                    break;
+
+	                case "bishop":
+	                    value = 330;
+	                    break;
+
+	                case "rook":
+	                    value = 500;
+	                    break;
+
+	                case "queen":
+	                    value = 900;
+	                    break;
+
+	                case "king":
+	                    value = 5000;
+	                    break;
 	            }
-				
-			}
-		}
-		
-		
-		return score; //If score is negative favours black whilst positive favours white
-	}
-	
-	
-	
-	public ArrayList<Move> generateMoves(Piece[][] board, boolean isWhiteTurn) {
-		ArrayList<Move> moves = new ArrayList<>();
-		
-		for(int i = 0; i < board.length; i++) {
-			for(int j = 0; j < board[i].length; j++) {
-				Piece piece = board[i][j];
-				if(piece == null || (piece.getColour() == "white" && !isWhiteTurn) || (piece.getColour() == "black" && isWhiteTurn) ) {continue;}
-			
-				for(Point movePointer : piece.getAllPossibleMovesList()) {
-					moves.add(new Move(piece.getCurrentPos().x, piece.getCurrentPos().y, movePointer.x, movePointer.y, piece, gp.getBoard().checkTileForPiece(movePointer.x, movePointer.y)));
-				}
-			}
-		}
-		
-		return moves;
-	}
-	
-	
-	public int minimax(Piece[][] board, int depth, int alpha, int beta, boolean isMaximising) {
-	    if (depth == 0 || isGameOver(board)) {
-	        return evaluateBoard(board, true);
+
+	            if (piece.getColour().equals("white")) {
+	                score += (isPlayingWhite) ? value : -value;
+	            } 
+	            else {
+	                score += (isPlayingWhite) ? -value : value;
+	            }
+	        }
 	    }
+	    return score;
+	}
 
-	    if (isMaximising) {  // Maximising player's turn (typically the player playing white)
+		
+	
+	public int minimax(Piece[][] board, int depth, int alpha, int beta, boolean isMaximizing, boolean isPlayingWhite, Stack<Move> moveHistory) {
+	    // Base case: if depth is 0 or game over, return the board evaluation
+	    if (depth == 0 || ChessLogic.isGameOver(board, isPlayingWhite)) {
+	        return evaluateBoard(board, isPlayingWhite);
+	    }
+	
+	    if (isMaximizing) {  
+	        // Maximizing player (AI)
 	        int maxEval = Integer.MIN_VALUE;
-	        for (char[][] newBoard : generateMoves(board, true)) {
-	            int eval = minimax(newBoard, depth - 1, alpha, beta, false);
-	            maxEval = Math.max(maxEval, eval);
-	            alpha = Math.max(alpha, eval); // Update alpha
-
-	            if (beta <= alpha) {  // Prune remaining branches
-	                break;
-	            }
+	        
+	        for (Piece piece : ChessLogic.findMoveablePieces(board, isPlayingWhite)) {
+	        	for(Point movePos : piece.findLegalMoves()) {
+	        		ChessLogic.movePiece(piece.getCurrentPosCol(), piece.getCurrentPosRow(), movePos.x, movePos.y, board, moveHistory, isPlayingWhite);
+	        		int eval = minimax(board, depth - 1, alpha, beta, false, isPlayingWhite, moveHistory);
+	        		ChessLogic.undoLastMove(board, moveHistory, isPlayingWhite);  // Undo move
+		            
+		            maxEval = Math.max(maxEval, eval);
+		            alpha = Math.max(alpha, eval);
+		            if (beta <= alpha) break;  // Alpha-Beta Pruning
+	        		
+	        	}
+	        	
 	        }
+	        
 	        return maxEval;
-
 	    } 
-	    else {  // Minimising player's turn (typically the player playing black)
+	    else {  
+	        // Minimizing player (Opponent)
 	        int minEval = Integer.MAX_VALUE;
-	        for (char[][] newBoard : generatePossibleMoves(board, false)) {
-	            int eval = minimax(newBoard, depth - 1, alpha, beta, true);
-	            minEval = Math.min(minEval, eval);
-	            beta = Math.min(beta, eval); // Update beta
-
-	            if (beta <= alpha) {  // Prune remaining branches
-	                break;
-	            }
+	        
+	        for (Piece piece : ChessLogic.findMoveablePieces(board, !isPlayingWhite)) {
+	        	for(Point movePos : piece.findLegalMoves()) {
+	        		ChessLogic.movePiece(piece.getCurrentPosCol(), piece.getCurrentPosRow(), movePos.x, movePos.y, board, moveHistory, !isPlayingWhite);
+	        		int eval = minimax(board, depth - 1, alpha, beta, true, isPlayingWhite, moveHistory);
+		            ChessLogic.undoLastMove(board, moveHistory, !isPlayingWhite);  // Undo move
+		            
+		            minEval = Math.min(minEval, eval);
+		            beta = Math.min(beta, eval);
+		            if (beta <= alpha) break;  // Alpha-Beta Pruning
+	        	}
 	        }
+	        	
 	        return minEval;
 	    }
-		
-		
-		return 0;
 	}
-	*/
+
+	
 	
 }

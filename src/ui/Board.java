@@ -126,39 +126,6 @@ public class Board {
 	
 
 	
-	public void movePiece(int startCol, int startRow, int newCol, int newRow) {		
-		Piece movingPiece = ChessLogic.checkTileForPiece(startRow, startCol, currentBoard);
-        Piece capturedPiece = ChessLogic.checkTileForPiece(newRow, newCol, currentBoard);
-		
-        if (capturedPiece != null && capturedPiece.getColour() == movingPiece.getColour()) {
-            return;
-        }
-        
-        Move move = new Move(startCol, startRow, newCol, newRow, movingPiece, capturedPiece);
-        gp.getMoveHistory().push(move);
-        currentBoard[newRow][newCol] =  movingPiece;
-        currentBoard[startRow][startCol] = null;
-        
-        movingPiece.setCurrentRowAndPos(newRow, newCol);
-        //capturedPiece.setCurrentRowAndPos(-1, -1); 
-        
-		gp.setWhiteTurn(!gp.isWhiteTurn());
-	}
 	
-	
-	
-	public void undoLastMove() {
-        if (gp.getMoveHistory().isEmpty()) return;
-
-        Move lastMove = gp.getMoveHistory().pop();
-        
-        currentBoard[lastMove.getOriginalRow()][lastMove.getOriginalCol()] =  lastMove.getMovingPiece();
-        currentBoard[lastMove.getNowRow()][lastMove.getNowCol()] =  lastMove.getCapturedPiece();  // Restore captured piece if any
-        
-        lastMove.getMovingPiece().setCurrentRowAndPos(lastMove.getOriginalRow(), lastMove.getOriginalCol());
-        lastMove.getCapturedPiece().setCurrentRowAndPos(lastMove.getNowRow(), lastMove.getNowCol());; 
-
-        gp.setWhiteTurn(!gp.isWhiteTurn()); // Reverse turn
-    }
 	
 }

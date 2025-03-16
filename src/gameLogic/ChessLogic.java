@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 import main.GamePanel;
 import pieces.Bishop;
@@ -87,6 +88,51 @@ public class ChessLogic {
 
 	    return allPiecesList;
 	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public static void movePiece(int startCol, int startRow, int newCol, int newRow, Piece[][] currentBoard, Stack<Move> moveHistory, boolean isWhiteTurn) {		
+		Piece movingPiece = checkTileForPiece(startRow, startCol, currentBoard);
+        Piece capturedPiece = checkTileForPiece(newRow, newCol, currentBoard);
+		
+        if (capturedPiece != null && capturedPiece.getColour() == movingPiece.getColour()) {
+            return;
+        }
+        
+        Move move = new Move(startCol, startRow, newCol, newRow, movingPiece, capturedPiece);
+        moveHistory.push(move);
+        currentBoard[newRow][newCol] =  movingPiece;
+        currentBoard[startRow][startCol] = null;
+        
+        movingPiece.setCurrentRowAndPos(newRow, newCol);
+        //capturedPiece.setCurrentRowAndPos(-1, -1); 
+        
+        isWhiteTurn = !isWhiteTurn;
+
+	}
+	
+	
+	
+	public static void undoLastMove(Piece[][] currentBoard, Stack<Move> moveHistory, boolean isWhiteTurn) {
+        if (moveHistory.isEmpty()) return;
+
+        Move lastMove = moveHistory.pop();
+        
+        // Restore moving piece to its original position
+        currentBoard[lastMove.getOriginalRow()][lastMove.getOriginalCol()] = lastMove.getMovingPiece();
+        lastMove.getMovingPiece().setCurrentRowAndPos(lastMove.getOriginalRow(), lastMove.getOriginalCol());
+
+        // Restore captured piece (if any)
+        if (lastMove.getCapturedPiece() != null) {
+            currentBoard[lastMove.getNowRow()][lastMove.getNowCol()] = lastMove.getCapturedPiece();
+            lastMove.getCapturedPiece().setCurrentRowAndPos(lastMove.getNowRow(), lastMove.getNowCol());
+        } 
+        else {
+            currentBoard[lastMove.getNowRow()][lastMove.getNowCol()] = null; // Clear if no piece was captured
+        }
+
+        isWhiteTurn = !isWhiteTurn; // Reverse turn
+    }
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -185,23 +231,54 @@ public class ChessLogic {
 	
 	public static boolean checkForCheckmate(Piece[][] board, boolean currentPlayerIsWhite) {		
 		if(isKingInDanger(board, currentPlayerIsWhite) == false) {
-			System.out.println("a");
+			//System.out.println("a");
 			return false; // King is not in check, so it's not checkmate
 		}
 		
 		Piece king = findKing(board, currentPlayerIsWhite);
 		
 		if(canKingEscape(board, king, currentPlayerIsWhite)) {
-			System.out.println("b");
+			//System.out.println("b");
 			return false;  // King has a way out
 		}
         
 
 	    if(canBlockOrCaptureAttacker(board, king, currentPlayerIsWhite)) {
-	    	System.out.println("c");
+	    	//System.out.println("c");
 	        return false;  // A piece can block or capture the attacker
 	    }
 
         return true;  // No escape, it's checkmate
+	}
+
+	
+	public static boolean isGameOver(Piece[][] board, boolean isPlayingWhite) {
+		// 1. Checkmate
+	    if (checkForCheckmate(board, isPlayingWhite)) {
+	        return true;
+	    }
+	    /*
+	    // 2. Stalemate
+	    if (isStalemate(board, isPlayingWhite)) {
+	        return true;
+	    }
+	
+	    // 3. Insufficient Material
+	    if (isInsufficientMaterial(board)) {
+	        return true;
+	    }
+	
+	    // 4. Threefold Repetition (Requires tracking previous board states)
+	    if (isThreefoldRepetition()) {
+	        return true;
+	    }
+	
+	    // 5. 50-Move Rule (Requires tracking move history)
+	    if (isFiftyMoveRule()) {
+	        return true;
+	    }
+	    */
+	
+	    return false;  // Game is still ongoing
 	}
 }
