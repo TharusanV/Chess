@@ -91,7 +91,7 @@ public class ChessLogic {
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static void movePiece(int startCol, int startRow, int newCol, int newRow, Piece[][] currentBoard, Stack<Move> moveHistory, boolean isWhiteTurn) {		
+	public static void movePiece(int startCol, int startRow, int newCol, int newRow, Piece[][] currentBoard, Stack<Move> moveHistory) {		
 		Piece movingPiece = checkTileForPiece(startRow, startCol, currentBoard);
         Piece capturedPiece = checkTileForPiece(newRow, newCol, currentBoard);
 		
@@ -106,14 +106,13 @@ public class ChessLogic {
         
         movingPiece.setCurrentRowAndPos(newRow, newCol);
         //capturedPiece.setCurrentRowAndPos(-1, -1); 
-        
-        isWhiteTurn = !isWhiteTurn;
+
 
 	}
 	
 	
 	
-	public static void undoLastMove(Piece[][] currentBoard, Stack<Move> moveHistory, boolean isWhiteTurn) {
+	public static void undoLastMove(Piece[][] currentBoard, Stack<Move> moveHistory) {
         if (moveHistory.isEmpty()) return;
 
         Move lastMove = moveHistory.pop();
@@ -130,8 +129,6 @@ public class ChessLogic {
         else {
             currentBoard[lastMove.getNowRow()][lastMove.getNowCol()] = null; // Clear if no piece was captured
         }
-
-        isWhiteTurn = !isWhiteTurn; // Reverse turn
     }
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////

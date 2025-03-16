@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import gameLogic.ChessLogic;
 import main.GamePanel;
 import pieces.Piece;
 
@@ -32,12 +33,15 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
                 else {
                 	//Move Piece
                 	if(gamePanel.getSelectedPiece().findLegalMoves().contains(new Point(col, row))){
-                		gamePanel.getBoard().movePiece(gamePanel.getSelectedPiece().getCurrentPosCol(), 
-                									   gamePanel.getSelectedPiece().getCurrentPosRow(), 
-                									   col, 
-                									   row);
+                		ChessLogic.movePiece(gamePanel.getSelectedPiece().getCurrentPosCol(), gamePanel.getSelectedPiece().getCurrentPosRow(), 
+                							 col, row,
+                							 gamePanel.getBoard().currentBoard, 
+                							 gamePanel.getMoveHistory());
                 		
+                		gamePanel.setWhiteTurn(!gamePanel.isWhiteTurn());
                 		gamePanel.setSelectedPiece(null);
+                		
+                		//System.out.println(gamePanel.isWhiteTurn());
                 	}
                 	else{ //Change Piece
                 		gamePanel.attemptChangeSelectedPiece(row, col);

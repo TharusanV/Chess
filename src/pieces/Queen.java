@@ -15,6 +15,7 @@ public class Queen extends Piece {
 		this.currentRow =  p_currentRow;
 		this.currentCol = p_currentCol;
 		this.colour = p_colour;
+		this.pieceValue = 900;
 		
 		loadPieceIcon(p_colour + "_queen");
 	}

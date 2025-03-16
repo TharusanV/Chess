@@ -15,6 +15,7 @@ public class Bishop extends Piece {
 		this.currentRow =  p_currentRow;
 		this.currentCol = p_currentCol;
 		this.colour = p_colour;
+		this.pieceValue = 330;
 		
 		loadPieceIcon(p_colour + "_bishop");
 	}

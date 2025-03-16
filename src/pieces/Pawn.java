@@ -18,6 +18,7 @@ public class Pawn extends Piece {
 		this.currentRow =  p_currentRow;
 		this.currentCol = p_currentCol;
 		this.colour = p_colour;
+		this.pieceValue = 100;
 		
 		this.startingPosRow = p_currentRow;
 		

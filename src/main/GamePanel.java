@@ -8,6 +8,7 @@ import java.util.Stack;
 
 import javax.swing.JPanel;
 
+import ai.IntermediateAI;
 import gameLogic.ChessLogic;
 import gameLogic.Move;
 import pieces.Piece;
@@ -35,6 +36,8 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	private boolean playerIsWhite = true;
 	private Piece selectedPiece = null;
+	
+	private IntermediateAI ai = new IntermediateAI(this);
 	
 	
 	Thread gameThread;
@@ -86,6 +89,12 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	public void update() {
 		board.update();
+		
+		if(isWhiteTurn != playerIsWhite) {
+			Move bestMove = ai.findBestMove(board.currentBoard, 4, !playerIsWhite, moveHistory);
+		    ChessLogic.movePiece(bestMove.getOriginalCol(), bestMove.getOriginalRow(), bestMove.getNowCol(), bestMove.getNowRow(), board.currentBoard, moveHistory);
+		    isWhiteTurn = !isWhiteTurn; 
+		}
 	}
 	
 	public void paintComponent(Graphics g) {

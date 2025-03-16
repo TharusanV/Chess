@@ -20,6 +20,7 @@ public class Piece {
 	String colour;
 	BufferedImage pieceImage;
 	Piece[][] currentBoard;
+	int pieceValue;
 	
 	public Piece() {
 	
@@ -91,6 +92,9 @@ public class Piece {
 		return false;
 	}
 	
+	public int getPieceValue() {
+		return pieceValue;
+	}
 	
 	public void checkDirection(List<Point> legalMoves, int rowIncrement, int colIncrement, int boardSize) {
 	    int row = currentRow;
