@@ -1,11 +1,35 @@
-# Java - Chess
+<div align="center">
+    <h3>Chess</h3>
+    <p>Java Chess with AI implementation through the MiniMax Algorithm</p>
+</div>
 
-### Preview:
-![image](https://user-images.githubusercontent.com/108695481/225460690-db466613-a062-4a66-95d4-ab295e80e712.png)
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about">About</a>
+    </li>
+    <li>
+      <a href="#demo">Demo</a>
+    </li>
+    <li>
+        <a href="#functionality">Functionality</a>
+    </li>
+    <li>
+        <a href="#installation">Installation</a>
+    </li>
+  </ol>
+</details>
 
-### Description:
-This project has been something I wanted to work on for a long time to test my knowledge of the OOP (Object-Oriented Programming) principles and here we are, the re-creation of the classic board game Chess in Java using JavaFX for the graphical interface element.
+<!-- ABOUT THE PROJECT -->
+## About
+![image](https://github.com/user-attachments/assets/9aa47264-6eaf-4785-8d5d-e6144ff0ba68)
+<p> Developed a fully functional chess application in Java, implementing the core rules and mechanics of the game through the use of OOP (Object-Oriented Programming).
+Integrated an AI opponent utilising the Minimax algorithm with alpha-beta pruning to enhance strategic decision-making. Conducted extensive testing through JUnit to ensure the robustness of the application, including AI performance under various conditions.
+</p>
 
-### Technologies used :
-    - Java
-    - JavaFX
+## Demo
+Coming Soon!
+
+
